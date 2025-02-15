@@ -304,7 +304,7 @@ ul {
         transform: translate(0, -50%);
         z-index: 100;
         box-shadow: inset 6px 6px 7px #dadada, -6px -6px 10px #ffffff;
-        border-radius: 10px;
+        border-radius: 50%;
         padding: 0 8px;
     }
     .menu-toggle span {
@@ -883,7 +883,7 @@ p {
     width: 40px;
     height: 40px;
     border: none;
-    border-radius: 10px;
+    border-radius: 40px;
     color: #ffffff;
     transition: 0.3s;
     background: linear-gradient(145deg, #acff54, #bfff00);
@@ -2043,3 +2043,5 @@ p {
       /* width: 100%; */
     }
   }
+
+  
