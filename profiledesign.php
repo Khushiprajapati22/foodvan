@@ -143,6 +143,7 @@ $conn->close();
         .nav-borders .nav-link.active {
             color: #0061f2;
             border-bottom-color: #0061f2;
+            padding-right:17px;
         }
         .nav-borders .nav-link {
             color: #69707a;
@@ -248,7 +249,7 @@ input.form-control::selection {
             <div class="card-body">
                 <form action="profiledesign.php" method="POST">
                     <!-- Change Password -->
-                    <h5 class="mb-3">Change Password</h5>
+                    <h5 class="mb-3" style="color:grey">Change Password</h5>
                     <div class="mb-3">
                         <label class="small mb-1" for="currentPassword" >Current Password</label>
                         <input class="form-control" id="currentPassword" name="currentPassword" type="password" placeholder="Enter current password">

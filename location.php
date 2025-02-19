@@ -180,6 +180,7 @@ iframe {
     </header>
 
     <br><br>
+
     <?php
                 $location = "CopaCabana, Pune, Maharashtra";
 
@@ -189,7 +190,7 @@ iframe {
     <div class="location-container">
     <div class="location-box bg-dark repeat-img">
         <div class="left-side">
-            <h1 class="location-title">WE ARE HERE</h1>
+            <h1 class="location-title" style="margin=bottom:5px;">WE ARE HERE</h1>
             <p class="location-description">
                 Welcome! This is our current location, located in the heart of the city. We are proud to serve you with fresh and delicious meals at <?php echo $location."."; ?> Whether you're here for a quick bite or a relaxing meal with friends, our location offers a welcoming atmosphere for all. We hope to see you soon! Use the map below to find us easily and navigate through the city to reach our spot without hassle.
             </p>
