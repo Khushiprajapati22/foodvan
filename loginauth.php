@@ -164,6 +164,11 @@ $_SESSION['user'] = true;
 
     <style>
        
+       body{
+        background-image: url('assets/images/faq-bg.png');
+    background-size: cover;
+    background-position: center;
+       }
 
 .form_container {
   width: fit-content;
@@ -347,7 +352,7 @@ $_SESSION['user'] = true;
 
     </style>
 </head>
-<body>
+<body >
   
 <div class="form_container">
   <div class="title_container">

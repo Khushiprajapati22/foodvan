@@ -3,7 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
+    <title>Contact Us</title>
+
+    <style>
+
+        body{
+            background-image: url('assets/images/faq-bg.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        :root {
+            --primary-color: #010712;
+            --secondary-color: #818386;
+            --bg-color: #FCFDFD;
+            --button-color: #3B3636;
+            --h1-color: #3F444C;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #FCFDFD;
+            --secondary-color: #818386;
+            --bg-color: #010712;
+            --button-color: #818386;
+            --h1-color: #FCFDFD;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            min-height: 100vh;
+        
+        }
+
+        .left-col {
+            flex: 1;
+            min-height: 100px;
+            background-image: url("assets/images/main-b.jpg");
+            background-size: cover;
+            background-position: center;
+            margin-left: 2rem;
+            margin-top: 2rem;
+            border-radius: 25px;
+        }
+
+        .right-col {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            font-family: 'Jost', sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            font-size: 2rem;
+            color: var(--h1-color);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-family: 'Helvetica Neue', sans-serif;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .l-con {
+            font-family: 'Jost', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .in-con, .area-con {
+            font-family: 'Helvetica Neue', sans-serif;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            background: var(--bg-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 15px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .in-con::placeholder, textarea::placeholder {
+            color: var(--secondary-color);
+        }
+
+        .area-con {
+            resize: none;
+            height: 120px;
+        }
+
+        .btn-con {
+            font-family: 'Jost', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            background: var(--button-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+        }
+
+        .btn-con:hover {
+            background: #292727;
+        }
+
+        @media (max-width: 768px) {
+            .contact-container {
+                flex-direction: column;
+            }
+
+            .left-col, .right-col {
+                flex: 1;
+                width: 100%;
+                padding: 1rem;
+            }
+            .left-col{
+                display:none;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            p {
+                text-align: center;
+            }
+
+            form {
+                width: 100%;
+            }
+
+            .in-con, .area-con {
+                font-size: 0.8rem;
+            }
+
+            .btn-con{
+                width: 100%;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
@@ -17,132 +176,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Pacifico&family=Great+Vibes&family=Lobster&family=Satisfy&display=swap" rel="stylesheet">
 
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <style>
-      /* Existing Styles */
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Pacifico&family=Great+Vibes&family=Lobster&family=Satisfy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 
-      body{
-    background-image: url('assets/images/faq-bg.png');
-    background-size: cover;
-    background-position: center;
-}
-
-.location-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    width: 100%;
-}
-
-.location-box {
-    background-image: url('assets/images/faq-bg.png');
-    background-size: cover;
-    background-position: center;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    width: 100%;
-    max-width: 1450px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-/* Left Side */
-.left-side {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-right: 20px;
-    text-align: left;
-}
-
-.location-title {
-    font-size: 40px;
-    font-weight: bold;
-    color: rgb(180, 255, 159);
-    font-family: 'Poppins', sans-serif;
-    margin-bottom: 15px;
-}
-
-.location-description {
-    font-size: 16px;
-    color: rgb(247, 247, 247);
-    line-height: 1.6;
-}
-
-/* Map Container */
-.map-container {
-    flex: 1;
-    height: 500px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius:30px;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .location-container {
-        flex-direction: column;
-        padding: 10px;
-    }
-
-    .location-box {
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    .left-side {
-        text-align: center;
-        padding-right: 0;
-        margin-bottom: 20px;
-    }
-
-    .location-title {
-        font-size: 24px;
-    }
-
-    .location-description {
-        font-size: 14px;
-        padding: 0 20px;
-    }
-
-    .map-container {
-        height: 350px;
-        margin-top: 20px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .location-title {
-        font-size: 20px;
-    }
-
-    .location-description {
-        font-size: 12px;
-        padding: 0 10px;
-    }
-
-    .map-container {
-        height: 300px;
-    }
-}
-
-    </style>
+    
 </head>
 <body>
+
 <header class="site-header">
         <div class="container">
             <div class="row"> 
@@ -166,7 +208,7 @@ iframe {
                                 <li><a href="contact.php">Contact</a></li>
                             </ul>
                         </nav>
-                        <div class="header-right">
+                        <div class="header-right" >
                             <form action="menu.php" class="header-search-form for-des">
                                 <input type="search" name="search-result" class="form-input" placeholder="Search Here...">
                                 <button type="submit">
@@ -187,29 +229,38 @@ iframe {
         </div>
     </header>
 
-    <br><br>
-
-    <?php
-                $location = "Copa Villa, Pune, Maharashtra";
-
-                // Generate the URL for the iframe
-                $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed"; 
-            ?>
-    <div class="location-container">
-    <div class="location-box bg-dark repeat-img">
-        <div class="left-side" style="align-items:center; justify-content:center;">
-            <h1 class="location-title" style="margin=bottom:5px; font-family: 'Great Vibes', cursive;">We Are Here</h1>
-            <p class="location-description">
-                Welcome! This is our current location, located in the heart of the city. We are proud to serve you with fresh and delicious meals at <span style="color:hsl(107, 100.00%, 90.40%);"><?php echo $location."."; ?></span> <br><br> Whether you're here for a quick bite or a relaxing meal with friends, our location offers a welcoming atmosphere for all. We hope to see you soon! Use the map below to find us easily and navigate through the city to reach our spot without hassle.
-            </p>
+    <br><br><br><br>
+    <div class="contact-container">
+        <div class="left-col">
         </div>
-        <div class="map-container">
-            <iframe src="<?php echo $map_url; ?>"></iframe>
+        <div class="right-col">
+            <h1 style="  font-family: 'Jost', sans-serif;
+            font-weight: 400;
+            text-transform: uppercase;
+            font-size: 2rem;
+            color: var(--h1-color);
+            margin-bottom: 1rem;">Contact us</h1>
+            <p style=" font-family: 'Helvetica Neue', sans-serif;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 1.3rem;
+            line-height: 1.5;">Planning to visit our food truck? Get insider tips on our location, menu offerings, and special events to make your visit unforgettable.</p>
+            <form id="contact-form" method="post">
+                <label class="l-con" for="name">Full name</label>
+                <input class="in-con" type="text" id="name" name="name" placeholder="Enter Full Name" required>
+
+                <label class="l-con" for="email">Email Address</label>
+                <input class="in-con" type="email" id="email" name="email" placeholder="Enter Email Address" required>
+
+                <label class="l-con" for="message">Message</label>
+                <textarea class="area-con" rows="6" placeholder="Enter Message" id="message" name="message" required></textarea>
+                </form>
+                <button class="btn-con" type="submit" id="submit" name="submit">Send</button>
+            
         </div>
     </div>
-</div>
 
-
+    
      <!-- Footer Start -->
 <div class="footer-5-column">
     <div class="footer-container">
@@ -314,9 +365,8 @@ iframe {
   </div>
   <!-- Footer End-->
 
-  
-    <!-- Scripts Spicy Monk -->
-    <script src="assets/js/jquery-3.5.1.min.js"></script>
+        <!-- Scripts Spicy Monk -->
+        <script src="assets/js/jquery-3.5.1.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/popper.min.js"></script>
     <script src="assets/js/font-awesome.min.js"></script>

@@ -333,6 +333,11 @@ if(!isset($_SESSION['access_token']))
   color: #8B8E98;
   text-decoration: underline;
 }
+body{
+        background-image: url('assets/images/faq-bg.png');
+    background-size: cover;
+    background-position: center;
+       }
 
     </style>
 </head>

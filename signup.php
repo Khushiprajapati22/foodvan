@@ -110,7 +110,11 @@ if(!isset($_SESSION['access_token']))
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
     <style>
-       
+          body{
+        background-image: url('assets/images/faq-bg.png');
+    background-size: cover;
+    background-position: center;
+       }
 
 .form_container {
   width: fit-content;
@@ -339,7 +343,7 @@ if(!isset($_SESSION['access_token']))
 
 
   <button title="Sign In" type="submit" class="sign-in_btn">
-    <span>Sign In</span>
+    <span>Sign up</span>
   </button>
 </form>
 <span class="subtitle">Already have an Account? <a href="loginauth.php">Sign In</a></span>
