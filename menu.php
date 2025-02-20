@@ -348,7 +348,7 @@ include 'header.php';
                                             <b>Rs. <?php echo htmlspecialchars($row['price']); ?></b>
                                         </li>
                                         <li>
-                                            <button class="dish-add-btn" onclick="alert('hello')">
+                                            <button class="dish-add-btn" onclick="addToCart(this)">
                                                 <i class="uil uil-plus"></i>
                                             </button>
                                         </li>
@@ -494,6 +494,31 @@ function scrollRight() {
 function scrolllefting() {
   scrollContainer.scrollBy({ left: -300, behavior: 'smooth' }); // Smooth scroll right
 }
+
+function addToCart(button) {
+    // Get the product title
+    const productTitle = button.closest(".dish-box").querySelector(".h3-title").textContent.trim();
+
+    // Send product title to the PHP script
+    fetch("addToCart.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            title: productTitle,
+        }),
+    })
+    .then((response) => response.text())
+    .then((data) => {
+        alert(data); // Show success or error message from PHP
+        window.location.href="cart.php";
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+    });
+}
+
 
 </script>
 

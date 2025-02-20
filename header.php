@@ -29,7 +29,7 @@
                                     <i class="uil uil-search"></i>
                                 </button>
                             </form>
-                            <a href="javascript:void(0)" class="header-btn header-cart">
+                            <a href="cart.php" class="header-btn header-cart">
                                 <i class="uil uil-shopping-bag"></i>
                                 <span class="cart-number"><?php if(isset($_SESSION['cartquantity'])){echo $_SESSION['cartquantity'];}else{echo "0";} ?></span>
                             </a>

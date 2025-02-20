@@ -975,7 +975,7 @@ function addToCart(button) {
     .then((response) => response.text())
     .then((data) => {
         alert(data); // Show success or error message from PHP
-        window.location.href="index.php";
+        window.location.href="cart.php";
     })
     .catch((error) => {
         console.error("Error:", error);

@@ -1,6 +1,74 @@
 <?php
 session_start();
 
+require('vendor/autoload.php'); // Include Razorpay PHP SDK
+
+use Razorpay\Api\Api;
+
+// Razorpay API Keys
+$keyId = 'rzp_test_dIb5tLtePAv8pA'; // Replace with your Razorpay Key ID
+$keySecret = 'z5Md1mAEj5P7kdiIU9WuwUUU'; // Replace with your Razorpay Key Secret
+
+if (isset($_GET['ischeckout'])) {
+    if ($_GET['ischeckout'] === 'true') {
+        unset($_GET['ischeckout'] );
+        $_GET['ischeckout']='false';
+        // Initialize Razorpay API
+        $api = new Api($keyId, $keySecret);
+
+        // Order details
+        $orderData = [
+            'receipt'         => 'order_rcptid_11',
+            'amount'          => 50000, // Amount in paise (50000 = ₹500.00)
+            'currency'        => 'INR',
+            'payment_capture' => 1 // Auto-capture after payment
+        ];
+
+        try {
+            // Create Razorpay order
+            $razorpayOrder = $api->order->create($orderData);
+            $orderId = $razorpayOrder['id']; // Get Razorpay Order ID
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            exit();
+        }
+
+        // Render Razorpay Checkout UI
+        echo "
+            <script src='https://checkout.razorpay.com/v1/checkout.js'></script>
+            <script>
+                var options = {
+                    key: '$keyId', // Razorpay Key ID
+                    amount: '50000', // Amount in paise
+                    currency: 'INR',
+                    name: 'SpicyMonk',
+                    description: 'Complete your Transaction for placing order sucessfully',
+                    image: 'https://st5.depositphotos.com/50037850/64753/v/450/depositphotos_647533524-stock-illustration-vector-illustration-pay-icon.jpg', // Optional logo URL
+                    order_id: '$orderId', // Razorpay Order ID
+                    handler: function (response) {
+                        // Handle successful payment response
+                        alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                        // You can redirect to a success page here
+                        window.location.href = 'success.php?payment_id=' + response.razorpay_payment_id;
+                    },
+                    prefill: {
+                        name: 'Your Name', // Prefill customer name
+                        email: 'your.email@example.com', // Prefill customer email
+                        contact: '9999999999' // Prefill customer phone
+                    },
+                    theme: {
+                        color: '#3399cc' // Checkout UI theme color
+                    }
+                };
+                var rzp = new Razorpay(options);
+                rzp.open();
+            </script>
+        ";
+    }
+}
+
+
+
 // Database connection
 $host = "localhost";
 $username = "root";
@@ -104,7 +172,7 @@ $stmt->close();
                             <strong>Total</strong>
                             <strong id="total">Rs. 0.00</strong>
                         </div>
-                        <button class="btn btn-primary w-100 py-3">Proceed to Checkout</button>
+                        <button class="btn btn-primary w-100 py-3" onclick=" window.location.href = `cart.php?ischeckout=${'true'}`;">Proceed to Checkout</button>
                     </div>
                 </div>
             </div>
@@ -221,6 +289,7 @@ $stmt->close();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        
         // Calculate and update totals
         function updateTotals() {
             let subtotal = 0;
