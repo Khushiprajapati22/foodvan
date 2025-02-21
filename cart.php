@@ -1,74 +1,5 @@
 <?php
 session_start();
-
-require('vendor/autoload.php'); // Include Razorpay PHP SDK
-
-use Razorpay\Api\Api;
-
-// Razorpay API Keys
-$keyId = 'rzp_test_dIb5tLtePAv8pA'; // Replace with your Razorpay Key ID
-$keySecret = 'z5Md1mAEj5P7kdiIU9WuwUUU'; // Replace with your Razorpay Key Secret
-
-if (isset($_GET['ischeckout'])) {
-    if ($_GET['ischeckout'] === 'true') {
-        unset($_GET['ischeckout'] );
-        $_GET['ischeckout']='false';
-        // Initialize Razorpay API
-        $api = new Api($keyId, $keySecret);
-
-        // Order details
-        $orderData = [
-            'receipt'         => 'order_rcptid_11',
-            'amount'          => 50000, // Amount in paise (50000 = ₹500.00)
-            'currency'        => 'INR',
-            'payment_capture' => 1 // Auto-capture after payment
-        ];
-
-        try {
-            // Create Razorpay order
-            $razorpayOrder = $api->order->create($orderData);
-            $orderId = $razorpayOrder['id']; // Get Razorpay Order ID
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-            exit();
-        }
-
-        // Render Razorpay Checkout UI
-        echo "
-            <script src='https://checkout.razorpay.com/v1/checkout.js'></script>
-            <script>
-                var options = {
-                    key: '$keyId', // Razorpay Key ID
-                    amount: '50000', // Amount in paise
-                    currency: 'INR',
-                    name: 'SpicyMonk',
-                    description: 'Complete your Transaction for placing order sucessfully',
-                    image: 'https://st5.depositphotos.com/50037850/64753/v/450/depositphotos_647533524-stock-illustration-vector-illustration-pay-icon.jpg', // Optional logo URL
-                    order_id: '$orderId', // Razorpay Order ID
-                    handler: function (response) {
-                        // Handle successful payment response
-                        alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-                        // You can redirect to a success page here
-                        window.location.href = 'success.php?payment_id=' + response.razorpay_payment_id;
-                    },
-                    prefill: {
-                        name: 'Your Name', // Prefill customer name
-                        email: 'your.email@example.com', // Prefill customer email
-                        contact: '9999999999' // Prefill customer phone
-                    },
-                    theme: {
-                        color: '#3399cc' // Checkout UI theme color
-                    }
-                };
-                var rzp = new Razorpay(options);
-                rzp.open();
-            </script>
-        ";
-    }
-}
-
-
-
 // Database connection
 $host = "localhost";
 $username = "root";
@@ -87,6 +18,93 @@ if (!isset($_SESSION['useremail'])) {
 }
 
 $useremail = $_SESSION['useremail'];
+
+require('vendor/autoload.php'); // Include Razorpay PHP SDK
+
+use Razorpay\Api\Api;
+
+// Razorpay API Keys
+$keyId = 'rzp_test_dIb5tLtePAv8pA'; // Replace with your Razorpay Key ID
+$keySecret = 'z5Md1mAEj5P7kdiIU9WuwUUU'; // Replace with your Razorpay Key Secret
+
+if (isset($_GET['amtvalue'])) {
+
+
+$userEmail = $_SESSION['useremail']; // Get the logged-in user's email
+$query = "SELECT username, contact FROM user_details WHERE email = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $userEmail);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+$username = $user['username'] ?? 'Guest';
+$contact = $user['contact'] ?? '0000000000';
+$order_date = date("Y-m-d H:i:s"); // Current date and time
+$order_id = "ODD0" . rand(100000, 999999); // Random Order ID
+
+
+        // Initialize Razorpay API
+        $api = new Api($keyId, $keySecret);
+
+        $amount = intval(round($_GET['amtvalue'] * 100));
+        // Order details
+        $orderData = [
+            'receipt'         => 'order_rcptid_11',
+            'amount'          => $amount, // Amount in paise (50000 = ₹500.00)
+            'currency'        => 'INR',
+            'payment_capture' => 1 // Auto-capture after payment
+        ];
+
+        try {
+            // Create Razorpay order
+            $razorpayOrder = $api->order->create($orderData);
+            $orderId = $razorpayOrder['id']; // Get Razorpay Order ID
+        } catch (Exception $e) {
+            if($e->getMessage()=="Order amount less than minimum amount allowed"){
+                header("Location: 404error.php");
+            }
+          
+            exit();
+        }
+
+        // Render Razorpay Checkout UI
+        echo "
+            <script src='https://checkout.razorpay.com/v1/checkout.js'></script>
+            <script>
+                var options = {
+                    key: '$keyId', // Razorpay Key ID
+                    amount: '$amount', // Amount in paise
+                    currency: 'INR',
+                    name: 'SpicyMonk',
+                    description: 'Complete your Transaction for placing order sucessfully',
+                    image: 'https://st5.depositphotos.com/50037850/64753/v/450/depositphotos_647533524-stock-illustration-vector-illustration-pay-icon.jpg', // Optional logo URL
+                    order_id: '$orderId', // Razorpay Order ID
+                    handler: function (response) {
+                        // Handle successful payment response
+
+                        // You can redirect to a success page here
+                        
+                    window.location.href = 'success.php?order_id=$order_id&email=$useremail&username=$username&amount=$amount&contact=$contact&order_date=$order_date' 
+                    },
+                    prefill: {
+                        name: '$username', // Prefill customer name
+                        email: '$userEmail', // Prefill customer email
+                        contact: '$contact' // Prefill customer phone
+                    },
+                    theme: {
+                        color: '#3399cc' // Checkout UI theme color
+                    }
+                };
+                var rzp = new Razorpay(options);
+                rzp.open();
+            </script>
+        ";
+    
+}
+
+
+
 
 // Fetch cart items for the logged-in user
 $cart_query = "SELECT * FROM cart WHERE email = ?";
@@ -119,6 +137,8 @@ $stmt->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
+    <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
+    <link rel="icon" href="Resources/SpicyMonk-Logo-V2.png" type="image/icon type">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="cart.css">
@@ -157,6 +177,7 @@ $stmt->close();
             </div>
             <div class="col-lg-4">
                 <div class="card shadow-sm">
+                    <!-- <form action="cart.php" method="GET"> -->
                     <div class="card-body">
                         <h4 class="mb-4">Order Summary</h4>
                         <div class="d-flex justify-content-between mb-3">
@@ -170,16 +191,28 @@ $stmt->close();
                         <hr>
                         <div class="d-flex justify-content-between mb-4">
                             <strong>Total</strong>
-                            <strong id="total">Rs. 0.00</strong>
+                            <strong style="position:absolute; right:85px;">Rs</strong>
+                            <strong id="total" name="total">0.00</strong>
                         </div>
-                        <button class="btn btn-primary w-100 py-3" onclick=" window.location.href = `cart.php?ischeckout=${'true'}`;">Proceed to Checkout</button>
+                        <button class="btn btn-primary w-100 py-3" name="submit" onclick="load()">Proceed to Checkout</button>
+                        <!-- onclick=" window.location.href = `cart.php?ischeckout=${'true'}`;" -->
                     </div>
+                    <!-- </form> -->
                 </div>
             </div>
+
+            <a href="menu.php"><h5 class="mb-4">Back to Menu?</h5></a>
         </div>
     </div>
 
-
+<script>
+    function load(){
+        let totalText = document.getElementById('total').innerText;
+    let totalAmount = totalText.replace('Rs. ', '').trim(); // Remove "Rs. " and trim spaces
+ 
+    window.location.href = `cart.php?amtvalue=${totalAmount}`;
+    }
+</script>
     
 
            <!-- Footer Start -->
@@ -301,7 +334,7 @@ $stmt->close();
             const total = subtotal + tax;
             document.getElementById('subtotal').innerText = `Rs. ${subtotal.toFixed(2)}`;
             document.getElementById('tax').innerText = `Rs. ${tax.toFixed(2)}`;
-            document.getElementById('total').innerText = `Rs. ${total.toFixed(2)}`;
+            document.getElementById('total').innerText = `${total.toFixed(2)}`;
         }
 
         // Update quantity
@@ -316,7 +349,7 @@ $stmt->close();
                 if (data.success) {
                     const cartItem = document.querySelector(`.cart-item[data-id="${id}"]`);
                     cartItem.querySelector('input').value = data.quantity;
-                    cartItem.querySelector('.price').innerText = `Rs. ${data.totalPrice}`;
+                    cartItem.querySelector('.price').innerText = `${data.totalPrice}`;
                     updateTotals();
                 } else {
                     alert("Failed to update quantity!");
@@ -354,31 +387,31 @@ $stmt->close();
         updateTotals();
 
 
-        // Update quantity
-function updateQuantity(id, action) {
-    fetch('update_cart.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `id=${id}&action=${action}`
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            const cartItem = document.querySelector(`.cart-item[data-id="${id}"]`);
-            cartItem.querySelector('input').value = data.quantity;
-            cartItem.querySelector('.price').innerText = `Rs. ${data.totalPrice}`;
-            document.getElementById('subtotal').innerText = `Rs. ${data.subtotal}`;
-            document.getElementById('tax').innerText = `Rs. ${data.tax}`;
-            document.getElementById('total').innerText = `Rs. ${data.total}`;
-        } else {
-            alert("Failed to update quantity!");
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Error updating quantity!");
-    });
-}
+//         // Update quantity
+// function updateQuantity(id, action) {
+//     fetch('update_cart.php', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//         body: `id=${id}&action=${action}`
+//     })
+//     .then(res => res.json())
+//     .then(data => {
+//         if (data.success) {
+//             const cartItem = document.querySelector(`.cart-item[data-id="${id}"]`);
+//             cartItem.querySelector('input').value = data.quantity;
+//             cartItem.querySelector('.price').innerText = `Rs. ${data.totalPrice}`;
+//             document.getElementById('subtotal').innerText = `Rs. ${data.subtotal}`;
+//             document.getElementById('tax').innerText = `Rs. ${data.tax}`;
+//             document.getElementById('total').innerText = `Rs. ${data.total}`;
+//         } else {
+//             alert("Failed to update quantity!");
+//         }
+//     })
+//     .catch(err => {
+//         console.error(err);
+//         alert("Error updating quantity!");
+//     });
+// }
 
 
 

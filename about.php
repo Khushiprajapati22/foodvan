@@ -23,628 +23,683 @@ session_start();
 
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <style>
-     
-      body{
-    background-image: url('assets/images/faq-bg.png');
-    background-size: cover;
-    background-position: center;
+
+/* Mobile - 360px */
+@media only screen and (min-width: 0rem) {
+    #services-296 {
+        padding: var(--sectionPadding);
+    }
+    #services-296 .cs-container {
+        width: 100%;
+        /* changes to 1440px on desktop */
+        max-width: 43.75rem;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* 48px - 64px */
+        gap: clamp(3rem, 6vw, 4rem);
+    }
+    #services-296 .cs-content {
+        /* set text align to left if content needs to be left aligned */
+        text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        /* centers content horizontally, set to flex-start to left align */
+        align-items: center;
+    }
+
+    #services-296 .cs-title {
+        max-width: 30ch;
+    }
+    #services-296 .cs-card-group {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        /* 16px - 20px */
+        gap: clamp(1rem, 1.5vw, 1.25rem);
+    }
+    #services-296 .cs-item {
+        list-style: none;
+        text-align: left;
+        width: 100%;
+        margin: 0;
+        padding: 2rem;
+        background-color: #f7f7f7;
+        border-radius: 1rem;
+        /* clips image corners */
+        overflow: hidden;
+        /* prevents padding from adding to height and width */
+        box-sizing: border-box;
+        position: relative;
+        z-index: 1;
+        transition: background-color 0.3s;
+    }
+    #services-296 .cs-item:hover {
+        cursor: pointer;
+    }
+    #services-296 .cs-item:hover .cs-image {
+        opacity: 1;
+    }
+    #services-296 .cs-item:hover .cs-image img {
+        transform: scale(1.1);
+    }
+    #services-296 .cs-item:hover .cs-icon {
+        /* turns it white */
+        filter: grayscale(1) brightness(1000%);
+    }
+    #services-296 .cs-item:hover .cs-h3,
+    #services-296 .cs-item:hover .cs-item-text {
+        color: #fff;
+    }
+    #services-296 .cs-image {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        z-index: -1;
+        background-color: var(--primary);
+        transition: opacity 0.3s;
+    }
+    #services-296 .cs-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0.4;
+        object-fit: cover;
+        transition: transform 0.6s;
+    }
+    #services-296 .cs-link {
+        text-decoration: none;
+    }
+    #services-296 .cs-icon {
+        width: auto;
+        height: 3rem;
+        margin-bottom: 1.5rem;
+        display: block;
+    }
+    #services-296 .cs-icon path {
+        transition: fill 0.3s;
+    }
+    #services-296 .cs-h3 {
+        /* 20px - 25px */
+        font-size: clamp(1.25rem, 2vw, 1.5625rem);
+        line-height: 1.2em;
+        margin: 0;
+        margin-bottom: 1rem;
+        color: var(--headerColor);
+        transition: color 0.3s;
+        font-weight: bold;
+    }
+    #services-296 .cs-item-text {
+        font-size: 1rem;
+        line-height: 1.5em;
+        margin: 0;
+        color: var(--bodyTextColor);
+        transition: color 0.3s;
+    }
+}
+/* Tablet - 768px */
+@media only screen and (min-width: 48rem) {
+    #services-296 .cs-card-group {
+        justify-content: space-between;
+        /* makes sure every box "stretches" to be the same height as the tallest box */
+        align-items: stretch;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    #services-296 .cs-item {
+        width: 48.6%;
+    }
+}
+/* Desktop - 1300px */
+@media only screen and (min-width: 81.25rem) {
+    #services-296 .cs-container {
+        max-width: 90rem;
+    }
+    #services-296 .cs-card-group {
+        justify-content: center;
+    }
+    #services-296 .cs-item {
+        /* we do this so it's stackable. You can add new any number of reviews you want and they will stack and center in the middle. We dont use grid because if you have an odd number of reviews, they don't stay centered.  They align with their grid lines. If you want 4 reviews in a row, lower the width under 22.5vw or 23% to get the desired sizes fit 4 in a row and then stack when you add more */
+        width: clamp(23.84%, 22.5vw, 23.95%);
+    }
 }
 
-.responsive-container-block {
-  min-height: 75px;
-  height: fit-content;
-  width: 100%;
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
-  margin-right: auto;
-  margin-bottom: 0px;
-  margin-left: auto;
-  justify-content: flex-start;
-
+:root {
+    /* Add these styles to your global stylesheet, which is used across all site pages. You only need to do this once. All elements in the library derive their variables and base styles from this central sheet, simplifying site-wide edits. For instance, if you want to modify how your h2's appear across the site, you just update it once in the global styles, and the changes apply everywhere. */
+    --primary:rgb(49, 202, 85);
+    --primaryLight:rgb(117, 216, 55);
+    --secondary:rgb(150, 227, 67);
+    --secondaryLight:rgb(98, 231, 68);
+    --headerColor: #1a1a1a;
+    --bodyTextColor: #4e4b66;
+    --bodyTextColorWhite: #fafbfc;
+    /* 13px - 16px */
+    --topperFontSize: clamp(0.8125rem, 1.6vw, 1rem);
+    /* 31px - 49px */
+    --headerFontSize: clamp(1.9375rem, 3.9vw, 3.0625rem);
+    --bodyFontSize: 1rem;
+    /* 60px - 100px top and bottom */
+    --sectionPadding: clamp(3.75rem, 7.82vw, 6.25rem) 1rem;
 }
 
-
-a {
-  text-decoration-line: none;
-  text-decoration-thickness: initial;
-  text-decoration-style: initial;
-  text-decoration-color: initial;
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
-.text-blk {
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 0px;
-  margin-left: 0px;
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  line-height: 25px;
+*, *:before, *:after {
+    /* prevents padding from affecting height and width */
+    box-sizing: border-box;
+}
+.cs-topper {
+    font-size: var(--topperFontSize);
+    line-height: 1.2em;
+    text-transform: uppercase;
+    text-align: inherit;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+    display: block;
 }
 
-.responsive-container-block.bigContainer {
-  padding-top: 10px;
-  padding-right: 30px;
-  padding-bottom: 10px;
-  padding-left: 30px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 50px 10px 50px;
-}
-
-.mainImg {
-  color: black;
-  width: 100%;
-  height: auto;
-  border-top-left-radius: 17px;
-  border-top-right-radius: 17px;
-  border-bottom-right-radius: 17px;
-  border-bottom-left-radius: 17px;
-}
-
-.text-blk.headingText {
-  font-size: 39px;
-  font-weight: 700;
-  line-height: 30px;
-  color: rgb(134, 206, 71);
-  padding-top: 0px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 0px;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 5px;
-  margin-left: 0px;
-}
-
-.allText {
-  padding-top: 0px;
-  padding-right: 0px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-  width: 40%;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 0px;
-  margin-left: 0px;
-}
-
-.text-blk.subHeadingText {
-  color: rgb(125, 125, 125);
-  font-size: 26px;
-  line-height: 32px;
-  font-weight: 700;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 15px;
-  margin-left: 0px;
-  padding-top: 0px;
-  padding-right: 10px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-}
-
-.text-blk.description {
-  font-size: 18px;
-  line-height: 26px;
-  color: rgb(125, 125, 125);
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 50px;
-  margin-left: 0px;
-  font-weight: 400;
-  padding-top: 0px;
-  padding-right: 10px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-}
-
-.explore {
-  font-size: 16px;
-  line-height: 28px;
-  color: rgb(102, 102, 102);
-  border-top-width: 2px;
-  border-right-width: 2px;
-  border-bottom-width: 2px;
-  border-left-width: 2px;
-  border-top-style: solid;
-  border-right-style: solid;
-  border-bottom-style: solid;
-  border-left-style: solid;
-  border-top-color: rgb(102, 102, 102);
-  border-right-color: rgb(102, 102, 102);
-  border-bottom-color: rgb(102, 102, 102);
-  border-left-color: rgb(102, 102, 102);
-  border-image-source: initial;
-  border-image-slice: initial;
-  border-image-width: initial;
-  border-image-outset: initial;
-  border-image-repeat: initial;
-  cursor: pointer;
-  background-color: white;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 0px;
-  margin-left: 0px;
-  padding-top: 8px;
-  padding-right: 40px;
-  padding-bottom: 8px;
-  padding-left: 40px;
-  transition: all 0.3s ease 0s;
-}
-
-.explore:hover {
-  background-image: initial;
-  background-position-x: initial;
-  background-position-y: initial;
-  background-size: initial;
-  background-repeat-x: initial;
-  background-repeat-y: initial;
-  background-attachment: initial;
-  background-origin: initial;
-  background-clip: initial;
-  background-color: rgb(104, 185, 84);
-  color: white;
-  border-top-width: initial;
-  border-right-width: initial;
-  border-bottom-width: initial;
-  border-left-width: initial;
-  border-top-style: none;
-  border-right-style: none;
-  border-bottom-style: none;
-  border-left-style: none;
-  border-top-color: initial;
-  border-right-color: initial;
-  border-bottom-color: initial;
-  border-left-color: initial;
-  border-image-source: initial;
-  border-image-slice: initial;
-  border-image-width: initial;
-  border-image-outset: initial;
-  border-image-repeat: initial;
-}
-
-.responsive-container-block.Container {
-  margin-top: 80px;
-  margin-right: auto;
-  margin-bottom: 50px;
-  margin-left: auto;
-  justify-content: center;
-  align-items: center;
-  max-width: 1320px;
-  padding-top: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-}
-
-.responsive-container-block.Container.bottomContainer {
-  flex-direction: row-reverse;
-  margin-top: 80px;
-  margin-right: auto;
-  margin-bottom: 50px;
-  margin-left: auto;
-  position: static;
-}
-
-.allText.aboveText {
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 0px;
-  margin-left: 40px;
-}
-
-.allText.bottomText {
-  margin-top: 0px;
-  margin-right: 40px;
-  margin-bottom: 0px;
-  margin-left: 0px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding-top: 0px;
-  padding-right: 15px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-}
-
-.purpleBox {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  max-width: 430px;
-  background-color: rgb(103, 215, 83);
-  padding-top: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  position: absolute;
-  bottom: -35px;
-  left: -8%;
-}
-
-.purpleText {
-  font-size: 18px;
-  line-height: 26px;
-  color: white;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 10px;
-  margin-left: 0px;
-}
-
-.ultimateImg {
-  width: 50%;
-  position: relative;
-}
-
-@media (max-width: 1024px) {
-  .responsive-container-block.Container {
-    max-width: 850px;
-  }
-
-  .mainImg {
-    width: 55%;
-    height: auto;
-  }
-
-  .allText {
-    width: 40%;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 20px;
-  }
-
-  .responsive-container-block.bigContainer {
-    padding-top: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-  }
-
-  .responsive-container-block.Container.bottomContainer {
-    margin-top: 80px;
-    margin-right: auto;
-    margin-bottom: 50px;
-    margin-left: auto;
-  }
-
-  .responsive-container-block.Container {
-    max-width: 830px;
-  }
-
-  .allText.aboveText {
-    margin-top: 30px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 40px;
-  }
-
-  .allText.bottomText {
-    margin-top: 30px;
-    margin-right: 40px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    text-align: left;
-  }
-
-  .text-blk.headingText {
-    text-align: center;
-  }
-
-  .allText.aboveText {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 30px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-  }
-
-  .text-blk.subHeadingText {
-    text-align: left;
-    font-size: 26px;
-    line-height: 32px;
-  }
-
-  .text-blk.description {
-    text-align: left;
-    line-height: 24px;
-  }
-
-  .explore {
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-  }
-
-  .responsive-container-block.bigContainer {
-    padding-top: 10px;
-    padding-right: 30px;
-    padding-bottom: 10px;
-    padding-left: 30px;
-  }
-
-  .responsive-container-block.Container {
-    justify-content: space-evenly;
-  }
-
-  .purpleBox {
-    bottom: 10%;
-  }
-
-  .responsive-container-block.Container.bottomContainer {
-    padding-top: 10px;
-    padding-right: 0px;
-    padding-bottom: 10px;
-    padding-left: 0px;
-    max-width: 930px;
-  }
-
-  .allText.bottomText {
-    width: 40%;
-  }
-
-  .purpleBox {
-    bottom: auto;
-    left: -10%;
-    top: 70%;
-  }
-
-  .mainImg {
-    width: 100%;
-  }
-
-  .text-blk.headingText {
-    text-align: left;
-  }
-}
-
-@media (max-width: 768px) {
-  .allText {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-  }
-
-  .responsive-container-block.Container {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .text-blk.headingText {
-    text-align: center;
-  }
-
-  .text-blk.subHeadingText {
-    text-align: center;
-    font-size: 24px;
-  }
-
-  .text-blk.description {
-    text-align: center;
-    font-size: 18px;
-  }
-
-  .allText {
-    margin-top: 40px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-  }
-
-  .allText.aboveText {
-    margin-top: 40px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-  }
-
-  .responsive-container-block.Container {
-    margin-top: 80px;
-    margin-right: auto;
-    margin-bottom: 50px;
-    margin-left: auto;
-  }
-
-  .responsive-container-block.Container.bottomContainer {
-    margin-top: 50px;
-    margin-right: auto;
-    margin-bottom: 50px;
-    margin-left: auto;
-  }
-
-  .allText.bottomText {
-    margin-top: 40px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-  }
-
-  .mainImg {
-    width: 100%;
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: -70px;
-    margin-left: 0px;
-  }
-
-  .responsive-container-block.Container.bottomContainer {
-    flex-direction: column;
-  }
-
-  .ultimateImg {
-    width: 100%;
-  }
-
-  .purpleBox {
-    position: static;
-  }
-
-  .allText.bottomText {
-    width: 100%;
-    align-items: flex-start;
-  }
-
-  .text-blk.headingText {
-    text-align: left;
-  }
-
-  .text-blk.subHeadingText {
-    text-align: left;
-  }
-
-  .text-blk.description {
-    text-align: left;
-  }
-
-  .ultimateImg {
-    position: static;
-  }
-
-  .mainImg {
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-  }
-
-  .ultimateImg {
+.cs-title {
+    font-size: var(--headerFontSize);
+    font-weight: 900;
+    line-height: 1.2em;
+    text-align: inherit;
+    max-width: 43.75rem;
+    margin: 0 0 1rem 0;
+    color: var(--headerColor);
     position: relative;
-  }
+}
 
-  .purpleBox {
-    margin-top: 0px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
+.cs-text {
+    font-size: var(--bodyFontSize);
+    line-height: 1.5em;
+    text-align: inherit;
+    width: 100%;
+    max-width: 40.625rem;
+    margin: 0;
+    color: var(--bodyTextColor);
+    margin-top:10px;
+}
+         
+/*-- -------------------------- -->
+<---         Services           -->
+<--- -------------------------- -*/
+
+/* Mobile - 360px */
+@media only screen and (min-width: 0rem) {
+  #services-1121 {
+    padding: var(--sectionPadding);
+    background-color: #1a1a1a;
+    position: relative;
+    z-index: 1;
+  }
+  #services-1121 .cs-container {
+    width: 100%;
+    max-width: 80rem;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* 48px - 64px */
+    gap: clamp(3rem, 6vw, 4rem);
+  }
+  #services-1121 .cs-card-group {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* changes to a clamp on tablet */
+    gap: 2.5rem;
+  }
+  #services-1121 .cs-item {
+    text-align: center;
+    list-style: none;
+    width: 100%;
+    max-width: 25.8125rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* 16px - 24px */
+    gap: clamp(1rem, 3vw, 1.5rem);
+  }
+  #services-1121 .cs-image-group {
+    /* 80px - 100px */
+    width: clamp(5rem, 8vw, 6.25rem);
+    height: clamp(5rem, 8vw, 6.25rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* prevents flexbox from squishing it */
+    flex: none;
+    position: relative;
+    z-index: 1;
+  }
+  #services-1121 .cs-icon {
+    /* 36px - 48px */
+    width: clamp(2.25rem, 4vw, 3rem);
+    height: auto;
+  }
+  #services-1121 .cs-graphic {
+    width: 100%;
+    height: auto;
     position: absolute;
-    left: 0px;
-    top: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
   }
-
-  .allText.bottomText {
-    margin-top: 100px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
+  #services-1121 .cs-h2 {
+    /* 20px - 25px */
+    font-size: clamp(1.25rem, 2.5vw, 1.5625rem);
+    line-height: 1.2em;
+    font-weight: 700;
+    text-align: inherit;
+    margin: 0 0 0.75rem;
+    color: var(--bodyTextColorWhite);
+  }
+  #services-1121 .cs-item-text {
+    font-size: 1rem;
+    line-height: 1.5em;
+    text-align: inherit;
+    margin: 0;
+    color: var(--bodyTextColorWhite);
+  }
+  #services-1121 .cs-waves {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    /* makes it act like a background image */
+    object-fit: cover;
+    position: absolute;
+    z-index: -1;
+  }
+}
+/* Tablet - 768px */
+@media only screen and (min-width: 48rem) {
+  #services-1121 .cs-card-group {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    /* 16px - 20px */
+    gap: clamp(1rem, 2.5vw, 1.25rem);
+  }
+}
+/* Small Desktop - 1024px */
+@media only screen and (min-width: 64rem) {
+  #services-1121 .cs-item {
+    text-align: left;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 
-@media (max-width: 500px) {
-  .responsive-container-block.Container {
-    padding-top: 10px;
-    padding-right: 0px;
-    padding-bottom: 10px;
-    padding-left: 0px;
-    width: 100%;
-    max-width: 100%;
-  }
 
-  .mainImg {
-    width: 100%;
-  }
-
-  .responsive-container-block.bigContainer {
-    padding-top: 10px;
-    padding-right: 25px;
-    padding-bottom: 10px;
-    padding-left: 25px;
-  }
-
-  .text-blk.subHeadingText {
-    font-size: 24px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    line-height: 28px;
-  }
-
-  .text-blk.description {
-    font-size: 16px;
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    line-height: 22px;
-  }
-
-  .allText {
-    padding-top: 0px;
-    padding-right: 0px;
-    padding-bottom: 0px;
-    padding-left: 0px;
-    width: 100%;
-  }
-
-  .allText.bottomText {
-    margin-top: 50px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    padding: 0 0 0 0;
-    margin: 30px 0 0 0;
-  }
-
-  .ultimateImg {
-    position: static;
-  }
-
-  .purpleBox {
-    position: static;
-  }
-
-  .stars {
-    width: 55%;
-  }
-
-  .allText.bottomText {
-    margin-top: 75px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-    margin-left: 0px;
-  }
-
-  .responsive-container-block.bigContainer {
-    padding-top: 10px;
-    padding-right: 20px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-  }
-
-  .purpleText {
-    font-size: 16px;
-    line-height: 22px;
-  }
-
-  .explore {
-    padding: 6px 35px 6px 35px;
-    font-size: 15px;
-  }
+*, *:before, *:after {
+    /* prevents padding from affecting height and width */
+    box-sizing: border-box;
 }
+.cs-topper {
+    font-size: var(--topperFontSize);
+    line-height: 1.2em;
+    text-transform: uppercase;
+    text-align: inherit;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.cs-title {
+    font-size: var(--headerFontSize);
+    font-weight: 900;
+    line-height: 1.2em;
+    text-align: inherit;
+    max-width: 43.75rem;
+    margin: 0 0 1rem 0;
+    color: var(--headerColor);
+    position: relative;
+}
+
+.cs-text {
+    font-size: var(--bodyFontSize);
+    line-height: 1.5em;
+    text-align: inherit;
+    width: 100%;
+    max-width: 40.625rem;
+    margin: 0;
+    color: var(--bodyTextColor);
+}
+          
+/*-- -------------------------- -->
+<---            FAQ             -->
+<--- -------------------------- -*/
+
+/* Mobile - 360px */
+@media only screen and (min-width: 0rem) {
+    #faq-350 {
+        padding: var(--sectionPadding);
+        background: #f7f7f7;
+    }
+    #faq-350 .cs-container {
+        width: 100%;
+        /* changes to 1280px at desktop */
+        max-width: 34.375rem;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* 40px - 48px */
+        gap: clamp(2.5rem, 5vw, 3rem);
+    }
+    #faq-350 .cs-content {
+        /* set text align to left if content needs to be left aligned */
+        text-align: left;
+        width: 100%;
+        max-width: 32.625rem;
+        display: flex;
+        flex-direction: column;
+        /* centers content horizontally, set to flex-start to left align */
+        align-items: flex-start;
+    }
+
+    #faq-350 .cs-title {
+        margin: 0 0 2rem 0;
+    }
+    #faq-350 .cs-faq-group {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    #faq-350 .cs-faq-item {
+        list-style: none;
+        width: 100%;
+        border-bottom: 1px solid #e8e8e8;
+        transition: border-bottom 0.3s;
+    }
+    #faq-350 .cs-faq-item.active {
+        border-color: var(--primaryLight);
+    }
+    #faq-350 .cs-faq-item.active .cs-button:before {
+        background-color: var(--primaryLight);
+        transform: rotate(315deg);
+    }
+    #faq-350 .cs-faq-item.active .cs-button:after {
+        background-color: var(--primaryLight);
+        transform: rotate(-315deg);
+    }
+    #faq-350 .cs-faq-item.active .cs-item-p {
+        height: auto;
+        /* 20px - 24px bottom */
+        /* 16px - 24px left & right */
+        padding: 0 clamp(1rem, 2vw, 1.5rem) clamp(1.25rem, 1.3vw, 1.5rem);
+        opacity: 1;
+    }
+    #faq-350 .cs-button {
+        font-size: 1rem;
+        line-height: 1.2em;
+        text-align: left;
+        font-weight: bold;
+        /* 16px - 20px */
+        padding: clamp(1rem, 1.3vw, 1.25rem);
+        border: none;
+        background: transparent;
+        color: var(--headerColor);
+        display: block;
+        width: 100%;
+        position: relative;
+        transition:
+            background-color 0.3s,
+            color 0.3s;
+    }
+    #faq-350 .cs-button:hover {
+        cursor: pointer;
+    }
+    #faq-350 .cs-button:before {
+        /* left line */
+        content: "";
+        width: 0.5rem;
+        height: 0.125rem;
+        background-color: var(--headerColor);
+        opacity: 1;
+        border-radius: 50%;
+        position: absolute;
+        display: block;
+        top: 45%;
+        right: 1.5rem;
+        transform: rotate(45deg);
+        /* animate the transform from the left side of the x axis, and the center of the y */
+        transform-origin: left center;
+        transition: transform 0.5s;
+    }
+    #faq-350 .cs-button:after {
+        /* right line */
+        content: "";
+        width: 0.5rem;
+        height: 0.125rem;
+        background-color: var(--headerColor);
+        opacity: 1;
+        border-radius: 50%;
+        position: absolute;
+        display: block;
+        top: 45%;
+        right: 1.3125rem;
+        transform: rotate(-45deg);
+        /* animate the transform from the right side of the x axis, and the center of the y */
+        transform-origin: right center;
+        transition: transform 0.5s;
+    }
+    #faq-350 .cs-button-text {
+        width: 80%;
+        display: block;
+    }
+    #faq-350 .cs-item-p {
+        /* 14px - 16px */
+        font-size: clamp(0.875rem, 1.5vw, 1rem);
+        line-height: 1.5em;
+        width: 90%;
+        height: 0;
+        margin: 0;
+        /* 16px - 24px */
+        padding: 0 clamp(1rem, 2vw, 1.5rem);
+        opacity: 0;
+        color: var(--bodyTextColor);
+        /* clips the text so it doesn't show up */
+        overflow: hidden;
+        transition:
+            opacity 0.3s,
+            padding-bottom 0.3s;
+    }
+    #faq-350 .cs-left {
+        /* scaling entire section down. font-size starts at a min in vw, and stops
+               when that value reaches 1em (16px). Since we want the picture elements to base their
+               font size on the parent and not the root, we use ems for this entire section  */
+        font-size: min(2.08vw, 0.791em);
+        width: 42.875em;
+        height: 42em;
+        position: relative;
+        /* flips it horizontally */
+        transform: scaleX(-1);
+    }
+    @keyframes floatAnimation {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-2em);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+    @keyframes floatAnimation2 {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-1em);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+    #faq-350 .cs-left:before {
+        /* blue circle */
+        content: "";
+        width: 7.5em;
+        height: 7.5em;
+        border-radius: 50%;
+        background: var(--secondary);
+        opacity: 1;
+        position: absolute;
+        display: block;
+        bottom: 6.25em;
+        left: 0em;
+        z-index: 10;
+        animation-name: floatAnimation;
+        animation-duration: 6s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+    }
+    #faq-350 .cs-picture {
+        border-radius: 50%;
+        /* border: clamp(6px, 1.2vw, 12px) solid #ffffff; */
+        /* clips the img tag corners */
+        overflow: hidden;
+        position: absolute;
+        display: block;
+    }
+    #faq-350 .cs-picture img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+    #faq-350 .cs-picture1 {
+        width: 42em;
+        height: 42em;
+        top: -0.75em;
+        left: -0.75em;
+    }
+    #faq-350 .cs-picture2 {
+        width: 12.5em;
+        height: 12.5em;
+        top: -0.75em;
+        left: -0.75em;
+        animation-name: floatAnimation2;
+        animation-duration: 20s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+    }
+    #faq-350 .cs-picture3 {
+        width: 18.75em;
+        height: 18.75em;
+        bottom: -0.75em;
+        right: -0.75em;
+        animation-name: floatAnimation;
+        animation-duration: 13s;
+        animation-delay: 1s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+    }
+}
+/* Desktop - 1024px */
+@media only screen and (min-width: 64rem) {
+    #faq-350 .cs-container {
+        max-width: 80rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 3.25rem;
+    }
+    #faq-350 .cs-left {
+        /* reset the scale */
+        font-size: min(1vw, 1em);
+        /* prevents flexbox from squishing it */
+        flex: none;
+        /* sends it to the right in the 2nd position */
+        order: 2;
+    }
+    #faq-350 .cs-title,
+    #faq-350 .cs-topper {
+        text-align: left;
+        width: 80%;
+        margin-left: 0;
+    }
+}
+
+
+
+*, *:before, *:after {
+    /* prevents padding from affecting height and width */
+    box-sizing: border-box;
+}
+.cs-topper {
+    font-size: var(--topperFontSize);
+    line-height: 1.2em;
+    text-transform: uppercase;
+    text-align: inherit;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.cs-title {
+    font-size: var(--headerFontSize);
+    font-weight: 900;
+    line-height: 1.2em;
+    text-align: inherit;
+    max-width: 43.75rem;
+    margin: 0 0 1rem 0;
+    color: var(--headerColor);
+    position: relative;
+}
+
+.cs-text {
+    font-size: var(--bodyFontSize);
+    line-height: 1.5em;
+    text-align: inherit;
+    width: 100%;
+    max-width: 40.625rem;
+    margin: 0;
+    color: var(--bodyTextColor);
+}
+                            
+
+                                
 
     </style>
 </head>
@@ -655,37 +710,160 @@ include 'header.php';
 
     <br><br>
 
-   
-<div class="responsive-container-block bigContainer">
-  <div class="responsive-container-block Container bottomContainer">
-    <div class="ultimateImg">
-      <img class="mainImg" src="assets/images/aboutus-bowl.jpg">
-      <div class="purpleBox">
-        <p class="purpleText">
-        Our passion for food and community drives us to serve the best. From local favorites to unique culinary creations, we strive to make every meal a celebration.
-        </p>
-        <img class="stars" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/mp5.svg">
-      </div>
+<section id="services-296">
+    <div class="cs-container">
+        <div class="cs-content">
+            <span class="cs-topper animate__animated "  data-animation="animate__fadeInUp">About Us</span>
+            <h2 class="cs-title animate__animated animate__delay-0.5s "  data-animation="animate__fadeInUp">We Are Committed To Delivering Top Quality Food Services</h2>
+            <br>
+            <p class="cs-text animate__animated animate__delay-1s"  data-animation="animate__fadeInUp">
+            At SpicyMonk, we bring the flavors of the streets to your plate with our vibrant food truck experience.   </p>
+         </div>
+        <ul class="cs-card-group">
+            <li class="cs-item">
+              
+                <i class="fa-solid fa-seedling fa-lg" style="color: #000000;"></i>
+                    <h3 class="cs-h3">Fresh & Authentic Flavors</h3>
+                    <p class="cs-item-text">
+                    We use the finest ingredients to create mouth-watering dishes that capture the essence of street food.
+                    </p>
+                
+                <picture class="cs-image"  aria-hidden="true">
+                    <source media="(max-width: 600px)" srcset="assets/images/bt1.jpg">
+                    <source media="(min-width: 601px)" srcset="assets/images/bt1.jpg">
+                    <img loading="lazy" decoding="async" src="assets/images/bt1.jpg" alt="library" width="413" height="266">
+                </picture>
+            </li>
+            <li class="cs-item">
+              
+                <i class="fa-solid fa-seedling fa-lg" style="color: #000000;"></i>
+                    <h3 class="cs-h3">Fast & Friendly Service</h3>
+                    <p class="cs-item-text">
+                        FEnjoy great food with quick and efficient service, ensuring you get your meal hot and fresh.
+                    </p>
+            
+                <picture class="cs-image"  aria-hidden="true">
+                    <source media="(max-width: 600px)" srcset="assets/images/bt1.jpg">
+                    <source media="(min-width: 601px)" srcset="assets/images/bt1.jpg">
+                    <img loading="lazy" decoding="async" src="assets/images/bt1.jpg" alt="library" width="413" height="266">
+                </picture>
+            </li>
+            <li class="cs-item">
+             
+                <i class="fa-solid fa-seedling fa-lg" style="color: #000000;"></i>
+                    <h3 class="cs-h3">Hygienic & Quality Standards</h3>
+                    <p class="cs-item-text">
+                    We prioritize hygiene and quality to ensure a safe and enjoyable dining experience for every customer.
+                  </p>
+                
+                <picture class="cs-image"  aria-hidden="true">
+                    <source media="(max-width: 600px)" srcset="assets/images/bt1.jpg">
+                    <source media="(min-width: 601px)" srcset="assets/images/bt1.jpg">
+                    <img loading="lazy" decoding="async" src="assets/images/bt1.jpg" alt="library" width="413" height="266">
+                </picture>
+            </li>
+            <li class="cs-item">
+            
+                <i class="fa-solid fa-seedling fa-lg" style="color: #000000;"></i>
+                    <h3 class="cs-h3">On-the-Go Convenience</h3>
+                    <p class="cs-item-text">
+                    Find us at various locations, bringing delicious meals straight to your neighborhood.
+                  </p>
+             
+                <picture class="cs-image">
+                    <source media="(max-width: 600px)" srcset="assets/images/bt1.jpg">
+                    <source media="(min-width: 601px)" srcset="assets/images/bt1.jpg">
+                    <img loading="lazy" decoding="async" src="assets/images/bt1.jpg" alt="library" width="413" height="266" aria-hidden="true">
+                </picture>
+            </li>
+        </ul>
     </div>
-    <div class="allText bottomText">
-      <p class="text-blk headingText">
-        About Us
-      </p>
-      <p class="text-blk subHeadingText">
-      Delightful flavors crafted with passion, bringing happiness to every moment.
-      </p>
-      <p class="text-blk description">
-      Welcome to our food truck! We bring you freshly prepared meals made from the finest ingredients, right to your doorstep. Our mission is to deliver exceptional flavors while creating memorable dining experiences. From gourmet recipes to innovative dishes, every bite is crafted with care and love.
-      <br><br>
-      <i class="fa-solid fa-phone-volume"></i> +91 8796873220
-    </p>
+</section>
+                        
+<section id="faq-350">
+    <div class="cs-container">
+        <div class="cs-left">
+            <!--Big Image-->
+            <picture class="cs-picture cs-picture1" aria-hidden="true">
+                <source media="(max-width: 600px)" srcset="assets/images/main-b.jpg">
+                <source media="(min-width: 601px)" srcset="assets/images/main-b.jpg">
+                <img loading="lazy" decoding="async" src="assets/images/main-b.jpg" alt="SpicyMonk Food Truck" width="672" height="672">
+            </picture>
+            <!--Medium Image-->
+            <picture class="cs-picture cs-picture2" aria-hidden="true">
+                <source media="(max-width: 600px)" srcset="assets/images/bt1.jpg">
+                <source media="(min-width: 601px)" srcset="assets/images/bt1.jpg">
+                <img loading="lazy" decoding="async" src="assets/images/bt1.jpg" alt="Delicious Pizza" width="300" height="300">
+            </picture>
+            <!--Small Image-->
+            <picture class="cs-picture cs-picture3" aria-hidden="true">
+                <source media="(max-width: 600px)" srcset="assets/images/bt4.jpg">
+                <source media="(min-width: 601px)" srcset="assets/images/bt4.jpg">
+                <img loading="lazy" decoding="async" src="assets/images/bt4.jpg" alt="Fresh Sushi" width="200" height="200">
+            </picture>
+        </div>
+        <div class="cs-content">
+            <span class="cs-topper">Asked Questions</span>
+            <h2 class="cs-title">Frequently Asked Questions</h2>
+            <ul class="cs-faq-group">
+                <!-- Active class added as default -->
+                <li class="cs-faq-item active">
+                    <button class="cs-button">
+                        <span class="cs-button-text">
+                            Where is SpicyMonk food truck located?
+                        </span>
+                    </button>
+                    <p class="cs-item-p">
+                        Our food truck moves around! Follow us on social media or check our website to see our current location and schedule.
+                    </p>
+                </li>
+                <li class="cs-faq-item">
+                    <button class="cs-button">
+                        <span class="cs-button-text">
+                            What type of food do you serve?
+                        </span>
+                    </button>
+                    <p class="cs-item-p">
+                        We specialize in spicy, flavorful street food, including delicious wraps, tacos, and fusion dishes made with fresh ingredients.
+                    </p>
+                </li>
+                <li class="cs-faq-item">
+                    <button class="cs-button">
+                        <span class="cs-button-text">
+                            Do you offer vegetarian or vegan options?
+                        </span>
+                    </button>
+                    <p class="cs-item-p">
+                        Yes! We have a variety of vegetarian and vegan options to ensure everyone can enjoy our flavors.
+                    </p>
+                </li>
+                <li class="cs-faq-item">
+                    <button class="cs-button">
+                        <span class="cs-button-text">
+                            Can I pre-order food for pickup?
+                        </span>
+                    </button>
+                    <p class="cs-item-p">
+                        Absolutely! You can place your order online or call ahead, and we’ll have it ready for you at our next stop.
+                    </p>
+                </li>
+                <li class="cs-faq-item">
+                    <button class="cs-button">
+                        <span class="cs-button-text">
+                            Do you cater for events?
+                        </span>
+                    </button>
+                    <p class="cs-item-p">
+                        Yes, we offer catering services for parties, corporate events, and special occasions. Contact us for details!
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
 
-      <a class="explore" href="menu.php">
-      Explore Our Menu
-      </a>
-    </div>
-  </div>
-</div>
+
+                                
 
 
      <!-- Footer Start -->
@@ -807,5 +985,35 @@ include 'header.php';
     <script src="assets/js/ScrollToPlugin.min.js"></script>
     <script src="assets/js/smooth-scroll.js"></script>
     <script src="main.js"></script>
+    <script>
+        
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const animationClass = entry.target.getAttribute("data-animation"); // Read the animation class
+                        entry.target.classList.add(animationClass);
+                    } else {
+                        const animationClass = entry.target.getAttribute("data-animation"); // Read the animation class
+                        entry.target.classList.remove(animationClass); // Reset animation for re-trigger
+                    }
+                });
+            });
+        
+            // Select all elements you want to animate
+            const elements = document.querySelectorAll("[data-animation]");
+            elements.forEach((el) => observer.observe(el));
+        });
+
+        const faqItems = Array.from(document.querySelectorAll('.cs-faq-item'));
+        for (const item of faqItems) {
+            const onClick = () => {
+            item.classList.toggle('active')
+        }
+        item.addEventListener('click', onClick)
+        }
+                                
+            </script>
 </body>
 </html>

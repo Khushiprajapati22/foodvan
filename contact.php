@@ -11,161 +11,339 @@ session_start();
 
     <style>
 
-        body{
-            background-image: url('assets/images/faq-bg.png');
-            background-size: cover;
-            background-position: center;
-        }
+     /* Mobile - 360px */
+@media only screen and (min-width: 0rem) {
+    #contact-1150 {
+        padding: var(--sectionPadding);
+        background-color: #f7f7f7;
+        position: relative;
+        z-index: 1;
+    }
+    #contact-1150 .cs-container {
+        width: 100%;
+        /* changes to 1280px at desktop */
+        max-width: 44rem;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+        flex-direction: column;
+        column-gap: auto;
+        /* 48px - 80px */
+        row-gap: clamp(3rem, 6vw, 5rem);
+        position: relative;
+    }
+    #contact-1150 .cs-content {
+        /* set text align to left if content needs to be left aligned */
+        text-align: center;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        /* centers content horizontally, set to flex-start to left align */
+        align-items: center;
+        margin-bottom:20px;
+    }
 
-        :root {
-            --primary-color: #010712;
-            --secondary-color: #818386;
-            --bg-color: #FCFDFD;
-            --button-color: #3B3636;
-            --h1-color: #3F444C;
-        }
+    #contact-1150 .cs-topper {
+        color: #767676;
+    }
+    #contact-1150 .cs-title {
+        max-width: 23ch;
+        margin: 0;
+    }
+    #contact-1150 .cs-picture {
+        width: 100%;
+        /* 240px - 300px */
+        height: clamp(15rem, 35vw, 18.75rem);
+        margin: 0 0 1.5rem;
+        border-radius: 1.5rem;
+        /* clips image corners */
+        overflow: hidden;
+        display: block;
+        position: relative;
+    }
+    #contact-1150 .cs-picture img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #contact-1150 .cs-contact-text {
+        font-size: 1rem;
+        line-height: 1.5em;
+        text-align: left;
+        margin: 0 0 1.5rem;
+        color: var(--bodyTextColor);
+    }
+    #contact-1150 .cs-ul {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+        position: relative;
+    }
+    #contact-1150 .cs-li {
+        list-style: none;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+    #contact-1150 .cs-li:hover .cs-icon-wrapper {
+        transform: scale(1.1);
+    }
+    #contact-1150 .cs-header {
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1.2em;
+        margin-bottom: 0.75rem;
+        color: var(--headerColor);
+        display: block;
+    }
+    #contact-1150 .cs-link {
+        font-size: 1rem;
+        line-height: 1.5em;
+        text-decoration: none;
+        color: #767676;
+        display: block;
+        position: relative;
+    }
+    #contact-1150 .cs-link:hover {
+        text-decoration: underline;
+    }
+    #contact-1150 .cs-icon-wrapper {
+        width: 3.75rem;
+        height: 3.75rem;
+        margin: 0;
+        border-radius: 50%;
+        border: 1px solid #bababa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* prevents flexbox from squishing it */
+        flex: none;
+        transition: transform 0.3s;
+    }
+    #contact-1150 .cs-icon {
+        width: 1.5rem;
+        height: auto;
+        display: block;
+    }
+    #contact-1150 .cs-form {
+        width: 100%;
+        /* 24px - 48px top and bottom */
+        /* 16px - 32px left and right */
+        padding: clamp(1.5rem, 5.18vw, 3rem) clamp(1rem, 4vw, 2rem);
+        /* prevents flexbox from affecting height and width */
+        box-sizing: border-box;
+        background-color: #fff;
+        border-radius: 1rem;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    #contact-1150 .cs-label {
+        /* 14px - 16px */
+        font-size: clamp(0.875rem, 1.5vw, 1rem);
+        width: 100%;
+        color: var(--headerColor);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    #contact-1150 .cs-input {
+        font-size: 1rem;
+        width: 100%;
+        height: 3.5rem;
+        padding: 0;
+        padding-left: 1.5rem;
+        color: var(--headerColor);
+        background-color: #f7f7f7;
+        border-radius: 0.5rem;
+        border: none;
+        /* prevents padding from adding to height and width */
+        box-sizing: border-box;
+    }
+    #contact-1150 .cs-input::placeholder {
+        color: #7d799c;
+        opacity: 0.6;
+    }
+    #contact-1150 .cs-textarea {
+        min-height: 7.5rem;
+        padding-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        font-family: inherit;
+    }
+    #contact-1150 .cs-button-solid {
+        font-size: 1rem;
+        /* 46px - 56px */
+        line-height: clamp(2.875em, 5.5vw, 3.5em);
+        text-decoration: none;
+        font-weight: 700;
+        text-align: center;
+        margin: 0;
+        color: #1a1a1a;
+        border: none;
+        min-width: 9.375rem;
+        padding: 0 1.5rem;
+        background-color: var(--secondary);
+        border-radius: 0.25rem;
+        overflow: hidden;
+        display: inline-block;
+        position: relative;
+        z-index: 1;
+        /* prevents padding from adding to the width */
+        box-sizing: border-box;
+        transition: color 0.3s;
+    }
+    #contact-1150 .cs-button-solid:before {
+        content: "";
+        position: absolute;
+        height: 100%;
+        width: 0%;
+        background: #000;
+        opacity: 1;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        border-radius: 0.25rem;
+        transition: width 0.3s;
+    }
+    #contact-1150 .cs-button-solid:hover {
+        color: #fff;
+    }
+    #contact-1150 .cs-button-solid:hover:before {
+        width: 100%;
+    }
+    #contact-1150 .cs-submit {
+        width: 100%;
+        min-width: 17.6875rem;
+        border-radius: 0.5rem;
+    }
+    #contact-1150 .cs-submit:hover {
+        cursor: pointer;
+    }
+    #contact-1150 .cs-graphic {
+        display: none;
+    }
+    #contact-1150 .cs-graphic1 {
+        width: 13rem;
+        height: auto;
+        position: absolute;
+        left: -7.5rem;
+        top: 8.625rem;
+    }
+    #contact-1150 .cs-graphic2 {
+        width: 12.8125rem;
+        height: auto;
+        position: absolute;
+        right: -9.75rem;
+        top: 0.5rem;
+    }
+}
+/* Desktop - 1024px */
+@media only screen and (min-width: 64rem) {
+    #contact-1150 .cs-container {
+        max-width: 80rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    #contact-1150 .cs-contact-group {
+        width: 50%;
+        max-width: 39.375rem;
+    }
+    #contact-1150 .cs-form {
+        width: 46%;
+        max-width: 36.125rem;
+    }
+    #contact-1150 .cs-submit {
+        width: auto;
+    }
+}
+/* Large Desktop - 1500px */
+@media only screen and (min-width: 93.75rem) {
+    #contact-1150 .cs-graphic {
+        display: block;
+    }
+}
 
-        [data-theme="dark"] {
-            --primary-color: #FCFDFD;
-            --secondary-color: #818386;
-            --bg-color: #010712;
-            --button-color: #818386;
-            --h1-color: #FCFDFD;
-        }
+                                
+:root {
+    /* Add these styles to your global stylesheet, which is used across all site pages. You only need to do this once. All elements in the library derive their variables and base styles from this central sheet, simplifying site-wide edits. For instance, if you want to modify how your h2's appear across the site, you just update it once in the global styles, and the changes apply everywhere. */
+    --primary:rgb(49, 202, 85);
+    --primaryLight:rgb(117, 216, 55);
+    --secondary:rgb(150, 227, 67);
+    --secondaryLight:rgb(98, 231, 68);
+    --headerColor: #1a1a1a;
+    --bodyTextColor: #4e4b66;
+    --bodyTextColorWhite: #fafbfc;
+    /* 13px - 16px */
+    --topperFontSize: clamp(0.8125rem, 1.6vw, 1rem);
+    /* 31px - 49px */
+    --headerFontSize: clamp(1.9375rem, 3.9vw, 3.0625rem);
+    --bodyFontSize: 1rem;
+    /* 60px - 100px top and bottom */
+    --sectionPadding: clamp(3.75rem, 7.82vw, 6.25rem) 1rem;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: all 0.3s ease-in-out;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
 
-        .contact-container {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-            min-height: 100vh;
-        
-        }
+*, *:before, *:after {
+    /* prevents padding from affecting height and width */
+    box-sizing: border-box;
+}
+.cs-topper {
+    font-size: var(--topperFontSize);
+    line-height: 1.2em;
+    text-transform: uppercase;
+    text-align: inherit;
+    letter-spacing: .1em;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+    display: block;
+}
 
-        .left-col {
-            flex: 1;
-            min-height: 100px;
-            background-image: url("assets/images/main-b.jpg");
-            background-size: cover;
-            background-position: center;
-            margin-left: 2rem;
-            margin-top: 2rem;
-            border-radius: 25px;
-        }
+.cs-title {
+    font-size: var(--headerFontSize);
+    font-weight: 900;
+    line-height: 1.2em;
+    text-align: inherit;
+    max-width: 43.75rem;
+    margin: 0 0 1rem 0;
+    color: var(--headerColor);
+    position: relative;
+}
 
-        .right-col {
-            flex: 1;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+.cs-text {
+    font-size: var(--bodyFontSize);
+    line-height: 1.5em;
+    text-align: inherit;
+    width: 100%;
+    max-width: 40.625rem;
+    margin: 0;
+    color: var(--bodyTextColor);
+}
 
-        h1 {
-            font-family: 'Jost', sans-serif;
-            font-weight: 400;
-            text-transform: uppercase;
-            font-size: 2rem;
-            color: var(--h1-color);
-            margin-bottom: 1rem;
-        }
-
-        p {
-            font-family: 'Helvetica Neue', sans-serif;
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .l-con {
-            font-family: 'Jost', sans-serif;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            color: var(--secondary-color);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .in-con, .area-con {
-            font-family: 'Helvetica Neue', sans-serif;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            background: var(--bg-color);
-            border: 1px solid var(--secondary-color);
-            border-radius: 15px;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            width: 100%;
-        }
-
-        .in-con::placeholder, textarea::placeholder {
-            color: var(--secondary-color);
-        }
-
-        .area-con {
-            resize: none;
-            height: 120px;
-        }
-
-        .btn-con {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            background: var(--button-color);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 10px;
-            padding: 0.75rem 1.5rem;
-            cursor: pointer;
-        }
-
-        .btn-con:hover {
-            background: #292727;
-        }
-
-        @media (max-width: 768px) {
-            .contact-container {
-                flex-direction: column;
-            }
-
-            .left-col, .right-col {
-                flex: 1;
-                width: 100%;
-                padding: 1rem;
-            }
-            .left-col{
-                display:none;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-                text-align: center;
-            }
-
-            p {
-                text-align: center;
-            }
-
-            form {
-                width: 100%;
-            }
-
-            .in-con, .area-con {
-                font-size: 0.8rem;
-            }
-
-            .btn-con{
-                width: 100%;
-                font-size: 0.85rem;
-            }
-        }
+.custom-fade-in {
+        --animate-fadeInUp-distance: 20px; /* Reduce from default 100px to 20px */
+    }
+    
     </style>
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -192,36 +370,74 @@ session_start();
 include 'header.php';
 ?>
 
-    <br><br><br><br>
-    <div class="contact-container">
-        <div class="left-col">
-        </div>
-        <div class="right-col">
-            <h1 style="  font-family: 'Jost', sans-serif;
-            font-weight: 400;
-            text-transform: uppercase;
-            font-size: 2rem;
-            color: var(--h1-color);
-            margin-bottom: 1rem;">Contact us</h1>
-            <p style=" font-family: 'Helvetica Neue', sans-serif;
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-            margin-bottom: 1.3rem;
-            line-height: 1.5;">Planning to visit our food truck? Get insider tips on our location, menu offerings, and special events to make your visit unforgettable.</p>
-            <form id="contact-form" method="post">
-                <label class="l-con" for="name">Full name</label>
-                <input class="in-con" type="text" id="name" name="name" placeholder="Enter Full Name" required>
 
-                <label class="l-con" for="email">Email Address</label>
-                <input class="in-con" type="email" id="email" name="email" placeholder="Enter Email Address" required>
-
-                <label class="l-con" for="message">Message</label>
-                <textarea class="area-con" rows="6" placeholder="Enter Message" id="message" name="message" required></textarea>
-                </form>
-                <button class="btn-con" type="submit" id="submit" name="submit">Send</button>
-            
+<br><br>
+<section id="contact-1150">
+    <div class="cs-container">
+        <div class="cs-content animate__animated custom-fade-in"  data-animation="animate__fadeInUp">
+            <span class="cs-topper">Contact Us</span>
+            <h2 class="cs-title">We Love to Hear from Our Happy Customers</h2>
         </div>
+        <div class="cs-contact-group">
+            <picture class="cs-picture">
+                <!--Mobile Image-->
+                <source media="(max-width: 600px)" srcset="assets/images/bt4.jpg">
+                <!--Tablet and above Image-->
+                <source media="(min-width: 601px)" srcset="assets/images/bt4.jpg">
+                <img loading="lazy" decoding="async" src="assets/images/bt4.jpg" alt="people" width="630" height="300">
+            </picture>
+            <p class="cs-contact-text">
+            There are many ways to reach us, but the best one is to stop by and taste the flavors yourself! Whether you have questions, feedback, or just want to say hello, we’re here. Find us on the streets, drop us a message, or connect with us on social media.
+            </p>
+            <ul class="cs-ul">
+                <li class="cs-li">
+                    <picture class="cs-icon-wrapper">
+                        <img aria-hidden="true" src="https://csimg.nyc3.cdn.digitaloceanspaces.com/Icons/mech-phone.svg" alt="phone icon" class="cs-icon" width="40" height="40" decoding="async">
+                    </picture>
+                    <div class="cs-flex-group">
+                        <span class="cs-header">Phone</span>
+                        <a href="tel:+91 8796873220
+                        " class="cs-link">+91 8796873220
+                        </a>
+                    </div>
+                </li>
+                <li class="cs-li">
+                    <picture class="cs-icon-wrapper">
+                        <img aria-hidden="true" src="https://csimg.nyc3.cdn.digitaloceanspaces.com/Icons/mech-pin.svg" alt="address icon" class="cs-icon" width="40" height="40" decoding="async">
+                    </picture>
+                    <div class="cs-flex-group">
+                        <span class="cs-header">Address</span>
+                        <a href="https://maps.app.goo.gl/EZS4t51fUsDTCXXL6" class="cs-link">Pimple Nilakh , Pune , Maharashtra</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--Form-->
+        <form class="cs-form" id="cs-form-1150" name="Contact Form" method="post" action="submit_feedback.php">
+            <label class="cs-label">
+                Name
+                <input class="cs-input" required type="text" id="name-1150" name="name" placeholder="Name">
+            </label>
+            <label class="cs-label cs-email">
+                Email
+                <input class="cs-input" required type="email" id="email-1150" name="email" placeholder="Email">
+            </label>
+            <label class="cs-label cs-phone">
+                Phone
+                <input class="cs-input" required type="number" id="phone-1150" name="phone" placeholder="Phone">
+            </label>
+            <label class="cs-label">
+                Message
+                <textarea class="cs-input cs-textarea" required name="Message" id="message-1150" placeholder="Write message..."></textarea>
+            </label>
+            <button class="cs-button-solid cs-submit" type="submit">Make an Appointment</button>
+        </form>
+        <!--Bounce Graphic-->
+        <img class="cs-graphic cs-graphic1" loading="lazy" decoding="async" src="https://csimg.nyc3.cdn.digitaloceanspaces.com/Images/MISC/bounce.svg" alt="bounce" width="208" height="124">
+        <!--Coin Graphic-->
+        <img class="cs-graphic cs-graphic2" loading="lazy" decoding="async" src="https://csimg.nyc3.cdn.digitaloceanspaces.com/Images/MISC/coin.svg" alt="bounce" width="205" height="161">
     </div>
+</section>
 
     
      <!-- Footer Start -->
@@ -342,5 +558,27 @@ include 'header.php';
     <script src="assets/js/ScrollToPlugin.min.js"></script>
     <script src="assets/js/smooth-scroll.js"></script>
     <script src="main.js"></script>
+
+    <script>
+        
+
+document.addEventListener("DOMContentLoaded", function () {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const animationClass = entry.target.getAttribute("data-animation"); // Read the animation class
+                entry.target.classList.add(animationClass);
+            } else {
+                const animationClass = entry.target.getAttribute("data-animation"); // Read the animation class
+                entry.target.classList.remove(animationClass); // Reset animation for re-trigger
+            }
+        });
+    });
+
+    // Select all elements you want to animate
+    const elements = document.querySelectorAll("[data-animation]");
+    elements.forEach((el) => observer.observe(el));
+});
+    </script>
 </body>
 </html>

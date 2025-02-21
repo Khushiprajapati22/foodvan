@@ -1,3 +1,40 @@
+<?php 
+
+// Check if the user is logged in and email is set in the session
+if (isset($_SESSION['useremail'])) {
+    $email = $_SESSION['useremail'];
+
+    // Database connection
+    $host = "localhost"; // Replace with your database host
+    $username = "root"; // Replace with your database username
+    $password = "abhi879687#"; // Replace with your database password
+    $database = "spicymonk"; // Replace with your database name
+
+    $conn = new mysqli($host, $username, $password, $database);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Query to get the total items in the cart for the logged-in user
+    $sql = "SELECT SUM(quantity) AS total_items FROM cart WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch the result
+    if ($row = $result->fetch_assoc()) {
+        $totalItems = $row['total_items'] ? $row['total_items'] : 0; // If no items, set total to 0
+        $_SESSION['cartquantity']=$totalItems;
+    }
+
+   
+}
+
+?>
+
 <!-- header.php -->
 <header class="site-header">
         <div class="container">

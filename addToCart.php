@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $insertStmt = $conn->prepare($insertQuery);
         $insertStmt->bind_param("ss", $userEmail, $productTitle);
         if ($insertStmt->execute()) {
-            echo "Product added to cart.";
+            
         } else {
             echo "Failed to add product to cart.";
         }
