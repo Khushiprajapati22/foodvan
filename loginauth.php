@@ -32,9 +32,9 @@ if ($conn->connect_error) {
     
     $user_id = uniqid('user_');
 
-
+    $hash=password_hash($password, PASSWORD_BCRYPT);
     $stmt = $conn->prepare("INSERT INTO users (user_id, user_email, user_password) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $user_id, $email, $password);
+    $stmt->bind_param("sss", $user_id, $email, $hash);
 
    
     if ($stmt->execute()) {
@@ -42,6 +42,7 @@ if ($conn->connect_error) {
     } else {
         header("Location: logout.php");
         header("Location: signup.php");
+        $_SESSION['warningsignup'] = true;
     }
 
     $stmt->close();

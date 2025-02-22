@@ -67,10 +67,11 @@ if (isset($_POST['securitysubmit'])) {
     // Ensure new password and confirm password match
     if ($newPassword === $confirmPassword) {
 
+        $hashpass=password_hash($newPassword, PASSWORD_BCRYPT);
         // Update the password directly in the database
         $sql = "UPDATE users SET user_password = ? WHERE user_email = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $newPassword, $email);
+        $stmt->bind_param("ss", $hashpass, $email);
 
         if ($stmt->execute()) {
             $_SESSION['profilesuccess'] = true;
@@ -84,6 +85,7 @@ if (isset($_POST['securitysubmit'])) {
         $stmt->close();
     } else {
         $_SESSION['profileerror'] = true;
+
         header("Location: profiledesign.php");
         exit();
     }

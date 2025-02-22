@@ -155,7 +155,7 @@ if (isset($_GET['generate_receipt'])) {
         <?php while ($row = $result->fetch_assoc()) { ?>
             <div class="card order-card mb-3 p-3">
                 <h5>Order ID: <?php echo $row['order_id']; ?></h5>
-                <p>Total: Rs<?php echo number_format($row['total_amount'], 2); ?></p>
+                <!-- <p>Total: Rs?php echo number_format($row['total_amount'], 2); ?></p> -->
                 <p>Date: <?php echo $row['order_date']; ?></p>
                 <a href="?generate_receipt=<?php echo $row['order_id']; ?>" class="btn btn-dark">Receipt</a>
             </div>
