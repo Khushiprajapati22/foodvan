@@ -157,11 +157,38 @@ include 'header.php';
     <br><br>
 
     <?php
-                $location = "Copa Villa, Pune, Maharashtra";
+// Database connection settings
+$host = "localhost";  
+$username = "root";  
+$password = "abhi879687#";  
+$database = "spicymonk";  
 
-                // Generate the URL for the iframe
-                $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed"; 
-            ?>
+$conn = new mysqli($host, $username, $password, $database);  
+
+if ($conn->connect_error) {  
+    die("Connection failed: " . $conn->connect_error);  
+}
+
+// Fetch the location name from the database
+$query = "SELECT location_name FROM location WHERE id = 1";
+$result = $conn->query($query);
+
+if ($result->num_rows > 0) {
+    // Location found, fetch the location name
+    $row = $result->fetch_assoc();
+    $location = $row['location_name'];
+
+    // Generate the URL for the iframe
+    $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed"; 
+} else {
+    // Default location if not found
+    $location = "Pune, Maharashtra";
+    $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed"; 
+}
+
+$conn->close();
+?>
+
     <div class="location-container">
     <div class="location-box bg-dark repeat-img">
         <div class="left-side" style="align-items:center; justify-content:center;">

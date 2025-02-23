@@ -1,6 +1,6 @@
 
 <?php
-
+session_start();
 
 // if (isset($_POST['submit'])) {
 
@@ -65,7 +65,7 @@ if ($conn->connect_error) {
 
     if ($result->num_rows > 0) {
         
-        $_SESSION['admin'] = $email;
+        $_SESSION['admin'] = true;
         $_SESSION['adminwarning'] = false;
         // Redirect 
         header("Location: dashboard.php");
