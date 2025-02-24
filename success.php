@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 // Database connection
 $host = "localhost";
 $username = "root";
@@ -12,12 +13,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'], $_GET['contact'], $_GET['order_date'])) {
     $order_id = $_GET['order_id'];
     $useremail = $_GET['email'];
     $username = $_GET['username'];
-    $amount = $_GET['amount']/100;
+    $amount = $_GET['amount'] / 100;
     $contact = $_GET['contact'];
     $order_date = $_GET['order_date']; 
 
@@ -38,8 +38,16 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
             $title = $row['title'];
             $quantity = $row['quantity'];
 
+            // Insert into orders table
             $orderStmt->bind_param("ssssisss", $order_id, $useremail, $username, $title, $quantity, $amount, $contact, $order_date);
             $orderStmt->execute();
+
+            // 🔹 Update stock in inventory
+            $updateStockSql = "UPDATE inventory SET stock = stock - ? WHERE title = ?";
+            $updateStockStmt = $conn->prepare($updateStockSql);
+            $updateStockStmt->bind_param("is", $quantity, $title);
+            $updateStockStmt->execute();
+            $updateStockStmt->close();
         }
 
         // Clear cart after order is placed
@@ -47,22 +55,18 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
         $clearCartStmt = $conn->prepare($clearCartSql);
         $clearCartStmt->bind_param("s", $useremail);
         $clearCartStmt->execute();
-        
-       
-    } else {
-        echo "<center><h1>Cart is empty!</h1></center>";
-        exit();
+
+        $cartStmt->close();
+        $orderStmt->close();
+        $clearCartStmt->close();
     }
 
-    $cartStmt->close();
-    $orderStmt->close();
-    $clearCartStmt->close();
     $conn->close();
 } else {
     echo "Invalid request!";
+    exit();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -105,4 +109,3 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
