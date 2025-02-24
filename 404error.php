@@ -36,6 +36,7 @@
             width: 100%;
         }
     </style>
+     <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
 </head>
 <body>
 

@@ -34,6 +34,9 @@ $current_page = basename($_SERVER['SCRIPT_NAME']);
         <li class="<?= ($current_page == 'adminnotify.php') ? 'active' : '' ?>">
             <a href="adminnotify.php"><i class='bx bxs-category'></i> <span class="text">Notifications</span></a>
         </li>
+        <li class="<?= ($current_page == 'reports.php') ? 'active' : '' ?>">
+            <a href="reports.php"><i class='bx bxs-category'></i> <span class="text">Reports</span></a>
+        </li>
     </ul>
     <ul class="side-menu">
         <li>
@@ -41,3 +44,8 @@ $current_page = basename($_SERVER['SCRIPT_NAME']);
         </li>
     </ul>
 </section>
+
+
+
+
+

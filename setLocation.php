@@ -34,6 +34,7 @@ $locationName = ($row = $result->fetch_assoc()) ? $row['location_name'] : "";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Location</title>
+    <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="dashboard.css">
     <style>
