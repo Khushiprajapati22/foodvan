@@ -21,6 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phone = $_POST['phone'];
     $message = $_POST['Message']; // Case-sensitive
 
+    if(strlen($phone) != 10) {
+        showNotification("Failed!", "Phone number must be 10 digits");
+        $_SESSION['feedback'] = false;
+        header("Location: contact.php");
+        exit();
+    }
     // Insert into database
     $sql = "INSERT INTO feedbacks (name, email, phone, message) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);

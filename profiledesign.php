@@ -48,8 +48,10 @@ if (isset($_POST['submit'])) {
     $stmt_check->execute();
     $stmt_check->store_result();
 
+    if(strlen($contact)==10){
     if ($stmt_check->num_rows > 0) {
         // Email exists, update the record
+           
         $sql_update = "UPDATE user_details SET username = ?, firstname = ?, lastname = ?, Uaddress = ?, contact = ? WHERE email = ?";
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param("ssssss", $username, $firstname, $lastname, $address, $contact, $email);
@@ -79,6 +81,10 @@ if (isset($_POST['submit'])) {
         }
         $stmt_insert->close();
     }
+
+  }else{
+    showNotification("Failed!", "Please enter a valid phone number.");
+  }
     $stmt_check->close();
 }
 

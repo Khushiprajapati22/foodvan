@@ -450,7 +450,7 @@ if(isset($_SESSION['feedback']) && $_SESSION['feedback'] == true){
 }
 
 if(isset($_SESSION['feedback']) && $_SESSION['feedback'] == false){
-    showNotification("Failed!", "Failed submission");
+    showNotification("Failed!", "Email & Contact must be Correct");
     unset($_SESSION['feedback']);
 }
 
