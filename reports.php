@@ -38,25 +38,55 @@ if (isset($_POST['download_report'])) {
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 12);
     
-    if ($reportType == 'sales') {
-        $pdf->Cell(190, 10, 'Sales Report', 0, 1, 'C');
-        $pdf->Ln(10);
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(40, 10, 'Order ID', 1);
-        $pdf->Cell(50, 10, 'Username', 1);
-        $pdf->Cell(50, 10, 'Title', 1);
-        $pdf->Cell(30, 10, 'Amount', 1);
+    $tables = [
+        'sales' => ['orders', ['order_id', 'username', 'title', 'amount']],
+        'suppliers' => ['suppliers', ['id', 'name', 'email', 'contact']],
+        'products' => ['products', ['id', 'title', 'rating', 'price','type','category']],
+        'customers' => ['user_details', ['firstname', 'lastname', 'email', 'contact','Uaddress']]
+    ];
+    if (array_key_exists($reportType, $tables)) {
+        list($table, $columns) = $tables[$reportType];
+    
+        $pdf->Cell(190, 8, ucfirst($reportType) . ' Report', 0, 1, 'C');
+        $pdf->Ln(5);
+    
+        $pdf->SetFont('Arial', 'B', 8); // Reduced font size
+    
+        // Calculate column width dynamically
+        $colCount = count($columns);
+        $colWidth = ($colCount > 4) ? 190 / $colCount : 40;
+        $tableWidth = $colWidth * $colCount;
+        $xPosition = (210 - $tableWidth) / 2; // Centering calculation
+    
+        // Move to center
+        $pdf->SetX($xPosition);
+    
+        // Print headers
+        foreach ($columns as $col) {
+            $pdf->Cell($colWidth, 6, ucfirst($col), 1);
+        }
         $pdf->Ln();
-        $pdf->SetFont('Arial', '', 10);
-        $result = $conn->query("SELECT order_id, username, title, amount FROM orders");
+    
+        $pdf->SetFont('Arial', '', 7); // Smaller font for better fit
+    
+        $result = $conn->query("SELECT " . implode(", ", $columns) . " FROM $table");
+    
         while ($row = $result->fetch_assoc()) {
-            $pdf->Cell(40, 10, $row['order_id'], 1);
-            $pdf->Cell(50, 10, $row['username'], 1);
-            $pdf->Cell(50, 10, $row['title'], 1);
-            $pdf->Cell(30, 10, $row['amount'], 1);
+            $pdf->SetX($xPosition); // Center each row
+    
+            foreach ($columns as $col) {
+                if ($col == 'Uaddress') {
+                    $pdf->MultiCell($colWidth, 6, $row[$col], 1);
+                } else {
+                    $pdf->Cell($colWidth, 6, $row[$col], 1);
+                }
+            }
             $pdf->Ln();
         }
     }
+    
+    
+    
     
     $pdf->Output();
     exit();
@@ -122,15 +152,20 @@ if (isset($_POST['download_report'])) {
                 </ul>
             </div>
         </div>
-
+<br>
         <div class="report-container">
-            <div class="report-card">
-                <h3>Sales Report</h3>
-                <form method="POST">
-                    <input type="hidden" name="report_type" value="sales">
-                    <button type="submit" name="download_report">Download</button>
-                </form>
-            </div>
+            <?php
+            $reportTypes = ['sales' => 'Sales Report', 'suppliers' => 'Suppliers Report', 'products' => 'Products Report', 'customers' => 'Customer Report'];
+            foreach ($reportTypes as $type => $label) {
+                echo "<div class='report-card'>
+                        <h3>$label</h3>
+                        <form method='POST'>
+                            <input type='hidden' name='report_type' value='$type'>
+                            <button type='submit' name='download_report'>Download</button>
+                        </form>
+                      </div>";
+            }
+            ?>
         </div>
     </main>
 </section>

@@ -190,7 +190,7 @@ $conn->close();
 ?>
 
     <div class="location-container">
-    <div class="location-box bg-dark repeat-img">
+    <div class="location-box  bg-dark repeat-img">
         <div class="left-side" style="align-items:center; justify-content:center;">
             <h1 class="location-title" style="margin=bottom:5px; font-family: 'Great Vibes', cursive;">We Are Here</h1>
             <p class="location-description">

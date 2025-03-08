@@ -138,7 +138,7 @@ $result = $conn->query($sql);
             <h3 style="font-weight:normal; margin-top:10px; margin-bottom:10px;">Add Category</h3>
             <form method="POST">
                 <input type="text" name="title" placeholder="Category Title" required>
-                <textarea name="description" placeholder="Category Description" rows="4" required></textarea>
+                <textarea name="description" placeholder="Category Description" rows="4" ></textarea>
                 <button type="submit">Add</button>
                 <button type="submit" name="delete_category" class="delete-btn">Delete Category</button>
             </form>

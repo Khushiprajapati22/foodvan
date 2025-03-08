@@ -192,6 +192,7 @@ $status = ($result->num_rows > 0) ? $result->fetch_assoc()['status'] : 'close';
         </span>
     </label>
 </div>
+<a href="adminCredChange.php">Change password</a>
 
 <script>
 document.getElementById('cartToggle').addEventListener('change', function() {
@@ -219,8 +220,10 @@ document.getElementById('cartToggle').addEventListener('change', function() {
                 <ul class="breadcrumb">
                     <li><a href="dashboard.php">Dashboard</a></li>
                 </ul>
+                
             </div>
         </div>
+        
 
         <!-- Dashboard Cards -->
         <ul class="box-info">

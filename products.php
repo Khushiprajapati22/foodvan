@@ -17,7 +17,20 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);  
 }
 
+
+if($_SERVER['REQUEST_METHOD']==='POST' && isset($_POST['delete_product'])){
+    $deleteTitle = $_POST['dltid'];
+    $deleteSql = "DELETE FROM products WHERE id = '$deleteTitle'";
+    if ($conn->query($deleteSql) === TRUE && $conn->affected_rows > 0) {
+        showNotification("Success", "Product deleted successfully");
+    } else {
+        showNotification("Failed", "Error: Enter Valid ID " . $conn->error);
+    }
+    
+}else{
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    
     $title = $_POST['title'];
     $description = $_POST['description'];
     $rating = $_POST['rating'];
@@ -67,8 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if it's a delete or update request
     if (isset($_POST['delete_product'])) {
-        $deleteTitle = $_POST['title'];
-        $deleteSql = "DELETE FROM products WHERE title = '$deleteTitle'";
+        $deleteTitle = $_POST['dltid'];
+        $deleteSql = "DELETE FROM products WHERE id = '$deleteTitle'";
         if ($conn->query($deleteSql) === TRUE) {
             showNotification("Success", "Product deleted successfully");
         } else {
@@ -90,6 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
     }
+}
 }
 
 $sql = "SELECT id, image_path, rating, title, description, type, persons, price, category FROM products";
@@ -212,9 +226,14 @@ $categoryResult = $conn->query($categorySql);
                 <input type="file" name="image" accept="image/*">
                 <div class="form-buttons">
                     <button type="submit">Add</button>
-                    <button type="submit" name="delete_product" class="delete-btn">Delete</button>
+                    <!-- <button type="submit" name="delete_product" class="delete-btn">Delete</button> -->
                     <button type="submit" name="update_product" class="update-btn">Update</button>
                 </div>
+                 </form>
+<br>
+            <form method="POST" enctype="multipart/form-data">
+            <input type="text" name="dltid" placeholder="Enter ID for deletion" required><br>
+                <button type="submit" name="delete_product" class="delete-btn">Delete</button>
             </form>
         </div>
 
@@ -278,7 +297,13 @@ $categoryResult = $conn->query($categorySql);
 </script>
 
 <script src="dashscript.js"></script>
-
+<script>
+        function closeNotification() {
+            document.querySelector(".cookie-card").style.display = "none";
+            document.getElementById("notificationOverlay").style.display = "none";
+            window.location.href = "products.php";
+        }
+    </script>
 </body>
 </html>
 
