@@ -1,16 +1,7 @@
 <?php
 session_start();
-// Database
-$host = "localhost"; 
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk"; 
-
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include database connection
+require_once 'db.php';
 
 if (!isset($_POST['id']) || !isset($_POST['action'])) {
     echo json_encode(['success' => false]);

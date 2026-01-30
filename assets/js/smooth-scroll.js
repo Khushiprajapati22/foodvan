@@ -110,13 +110,20 @@ var sections = $('section'),
     nav = $('.foody-nav-menu , .banner-btn'),
     nav_height = nav.outerHeight();
 
-nav.find('a').on('click', function() {
+// Only apply smooth scroll to links that go to an ID on the same page (href="#something")
+nav.find('a[href^="#"]').on('click', function (e) {
+    e.preventDefault();
+
     var $el = $(this),
-        id = $el.attr('href');
+        id = $el.attr('href'); // e.g. "#faq"
 
-    $('html, body').animate({
-        scrollTop: $(id).offset().top - nav_height
-    }, 500);
-
-    return false;
+    // Only scroll if the target element actually exists
+    if ($(id).length) {
+        $('html, body').animate(
+            {
+                scrollTop: $(id).offset().top - nav_height
+            },
+            500
+        );
+    }
 });

@@ -10,16 +10,8 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
 
 
 <?php
-$host = "localhost";  
-$username = "root";  
-$password = "abhi879687#";  
-$database = "spicymonk";  
-
-$conn = new mysqli($host, $username, $password, $database);  
-
-if ($conn->connect_error) {  
-    die("Connection failed: " . $conn->connect_error);  
-}
+// Include database connection
+require_once 'db.php';
 
 $sql = "SELECT order_id, email, username, title, quantity, amount, contact, order_date FROM orders ORDER BY order_date DESC";
 $result = $conn->query($sql);

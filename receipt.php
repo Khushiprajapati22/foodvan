@@ -2,19 +2,11 @@
 require('fpdf.php');
 session_start();
 
-// Database connection
-$host = "localhost";
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk";
-
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include database connection
+require_once 'db.php';
 
 // Fetch latest order details
-$sql = "SELECT order_id, email FROM orders ORDER BY id DESC LIMIT 1";  
+$sql = "SELECT order_id, email FROM orders ORDER BY id DESC LIMIT 1";
 $result = $conn->query($sql);
 if ($result->num_rows === 0) {
     die("No order found!");
@@ -51,10 +43,9 @@ class PDF extends FPDF
 {
     function Header()
     {
-        $this->Image('spicymonk-logo.png', 160, 10, 30);
         $this->SetFont('Arial', 'B', 16);
         $this->SetTextColor(0, 128, 0);
-        $this->Cell(0, 10, 'SpicyMonk', 0, 1, 'L');
+        $this->Cell(0, 10, 'FoodVan', 0, 1, 'L');
         $this->SetFont('Arial', '', 10);
         $this->SetTextColor(0, 0, 0);
         $this->Cell(0, 5, '123 Food Street, Delhi, India', 0, 1, 'L');
@@ -104,7 +95,7 @@ $subtotal = 0;
 foreach ($orderDetails as $order) {
     $price = $order['price'] ?? 0; // Avoid null errors
     $amount = $order['quantity'] * $price;
-    
+
     $pdf->Cell(20, 8, $order['quantity'], 1, 0, 'C');
     $pdf->Cell(90, 8, $order['title'], 1, 0, 'L');
     $pdf->Cell(40, 8, number_format($price, 2), 1, 0, 'R');

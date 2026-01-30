@@ -1,25 +1,15 @@
 <?php
 session_start();
-if(isset($_SESSION['serch-value-fetch'])){
-    unset( $_SESSION['serch-value-fetch']);
-  }
-// Database connection
-$host = "localhost";
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk";
-
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if (isset($_SESSION['serch-value-fetch'])) {
+    unset($_SESSION['serch-value-fetch']);
 }
+// Include database connection
+require_once 'db.php';
 
+// Check cart status
 $sql = "SELECT status FROM cart_status LIMIT 1";
 $result = $conn->query($sql);
 $status = ($result->num_rows > 0) ? $result->fetch_assoc()['status'] : 'close';
-
-
 // Redirect to home if cart is open
 if ($status == 'close') {
     header("Location: not_available.php");
@@ -29,8 +19,8 @@ if ($status == 'close') {
 // Check if user is logged in
 if (!isset($_SESSION['useremail'])) {
     // die("<center><h1>Please log in to view your cart.</h1><center>");
- 
-echo '
+
+    echo '
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,7 +78,7 @@ echo '
 </body>
 </html>';
 
-exit();
+    exit();
 
 }
 
@@ -104,54 +94,54 @@ $keySecret = 'z5Md1mAEj5P7kdiIU9WuwUUU'; // Replace with your Razorpay Key Secre
 
 if (isset($_GET['amtvalue'])) {
 
-// 🔹 Define an array to store out-of-stock items
-$outOfStockItems = [];
+    // 🔹 Define an array to store out-of-stock items
+    $outOfStockItems = [];
 
-// 🔹 Get all cart items for the logged-in user
-$sql = "SELECT title, quantity FROM cart WHERE email = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $useremail);
-$stmt->execute();
-$result = $stmt->get_result();
+    // 🔹 Get all cart items for the logged-in user
+    $sql = "SELECT title, quantity FROM cart WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $useremail);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-while ($cartItem = $result->fetch_assoc()) {
-    $cartTitle = $cartItem['title'];
-    $cartQuantity = $cartItem['quantity'];
+    while ($cartItem = $result->fetch_assoc()) {
+        $cartTitle = $cartItem['title'];
+        $cartQuantity = $cartItem['quantity'];
 
-    // 🔹 Check stock for the same title in inventory
-    $sqlStock = "SELECT stock FROM inventory WHERE title = ?";
-    $stmtStock = $conn->prepare($sqlStock);
-    $stmtStock->bind_param("s", $cartTitle);
-    $stmtStock->execute();
-    $stockResult = $stmtStock->get_result()->fetch_assoc();
-    $availableStock = $stockResult['stock'] ?? 0;
-    $stmtStock->close();
+        // 🔹 Check stock for the same title in inventory
+        $sqlStock = "SELECT stock FROM inventory WHERE title = ?";
+        $stmtStock = $conn->prepare($sqlStock);
+        $stmtStock->bind_param("s", $cartTitle);
+        $stmtStock->execute();
+        $stockResult = $stmtStock->get_result()->fetch_assoc();
+        $availableStock = $stockResult['stock'] ?? 0;
+        $stmtStock->close();
 
-    // 🔹 If cart quantity exceeds stock, store title in array
-    if ($cartQuantity > $availableStock) {
-        $outOfStockItems[] = $cartTitle;
+        // 🔹 If cart quantity exceeds stock, store title in array
+        if ($cartQuantity > $availableStock) {
+            $outOfStockItems[] = $cartTitle;
+        }
     }
-}
 
-// 🔹 Check if any items are out of stock
-if (!empty($outOfStockItems)) {
-    include 'notification.php';
-    showNotification("OUT OF STOCK", implode(", ", $outOfStockItems));
-    
-}else{
+    // 🔹 Check if any items are out of stock
+    if (!empty($outOfStockItems)) {
+        include 'notification.php';
+        showNotification("OUT OF STOCK", implode(", ", $outOfStockItems));
 
-$userEmail = $_SESSION['useremail']; // Get the logged-in user's email
-$query = "SELECT username, contact FROM user_details WHERE email = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("s", $userEmail);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+    } else {
 
-$username = $user['username'] ?? 'Guest';
-$contact = $user['contact'] ?? '0000000000';
-$order_date = date("Y-m-d H:i:s"); // Current date and time
-$order_id = "ODD0" . rand(100000, 999999); // Random Order ID
+        $userEmail = $_SESSION['useremail']; // Get the logged-in user's email
+        $query = "SELECT username, contact FROM user_details WHERE email = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $userEmail);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        $username = $user['username'] ?? 'Guest';
+        $contact = $user['contact'] ?? '0000000000';
+        $order_date = date("Y-m-d H:i:s"); // Current date and time
+        $order_id = "ODD0" . rand(100000, 999999); // Random Order ID
 
 
         // Initialize Razorpay API
@@ -160,12 +150,12 @@ $order_id = "ODD0" . rand(100000, 999999); // Random Order ID
         $amtvalue = isset($_GET['amtvalue']) ? $_GET['amtvalue'] : '0';
         $amtvalue = preg_replace('/[^0-9.]/', '', $amtvalue); // Remove non-numeric characters except decimals
         $amount = intval(round(floatval($amtvalue) * 100));
-        
+
         // Order details
         $orderData = [
-            'receipt'         => 'order_rcptid_11',
-            'amount'          => $amount, // Amount in paise (50000 = ₹500.00)
-            'currency'        => 'INR',
+            'receipt' => 'order_rcptid_11',
+            'amount' => $amount, // Amount in paise (50000 = ₹500.00)
+            'currency' => 'INR',
             'payment_capture' => 1 // Auto-capture after payment
         ];
 
@@ -174,10 +164,10 @@ $order_id = "ODD0" . rand(100000, 999999); // Random Order ID
             $razorpayOrder = $api->order->create($orderData);
             $orderId = $razorpayOrder['id']; // Get Razorpay Order ID
         } catch (Exception $e) {
-            if($e->getMessage()=="Order amount less than minimum amount allowed"){
+            if ($e->getMessage() == "Order amount less than minimum amount allowed") {
                 header("Location: 404error.php");
             }
-          
+
             exit();
         }
 
@@ -189,7 +179,7 @@ $order_id = "ODD0" . rand(100000, 999999); // Random Order ID
                     key: '$keyId', // Razorpay Key ID
                     amount: '$amount', // Amount in paise
                     currency: 'INR',
-                    name: 'SpicyMonk',
+                    name: 'FoodVan',
                     description: 'Complete your Transaction for placing order sucessfully',
                     image: 'https://st5.depositphotos.com/50037850/64753/v/450/depositphotos_647533524-stock-illustration-vector-illustration-pay-icon.jpg', // Optional logo URL
                     order_id: '$orderId', // Razorpay Order ID
@@ -214,8 +204,8 @@ $order_id = "ODD0" . rand(100000, 999999); // Random Order ID
                 rzp.open();
             </script>
         ";
-    
-}
+
+    }
 }
 
 
@@ -249,6 +239,7 @@ $stmt->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -259,6 +250,7 @@ $stmt->close();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="cart.css">
 </head>
+
 <body>
     <div class="container py-5">
         <div class="row">
@@ -268,24 +260,34 @@ $stmt->close();
                         <h4 class="mb-4 fw-bold">SHOPPING CART - <?php echo count($cart_items); ?> ITEMS</h4>
                         <div class="row g-4">
                             <?php foreach ($cart_items as $item): ?>
-                            <div class="col-12">
-                                <div class="cart-item d-flex align-items-start gap-4" data-id="<?php echo $item['id']; ?>">
-                                    <img src="<?php echo $item['image_path']; ?>" class="product-img flex-shrink-0 rounded-circle" alt="<?php echo $item['title']; ?>">
-                                    <div class="flex-grow-1">
-                                        <h5 class="fw-semibold mb-2"><?php echo $item['title']; ?></h5>
-                                        <p class="text-muted mb-3"><?php echo $item['description']; ?></p>
-                                        <div class="d-flex align-items-center flex-wrap gap-3">
-                                            <div class="input-group quantity-selector">
-                                                <button class="btn btn-outline-secondary px-3 rounded-start-3" onclick="updateQuantity(<?php echo $item['id']; ?>, 'decrement')">-</button>
-                                                <input type="text" class="form-control text-center" value="<?php echo $item['quantity']; ?>" disabled>
-                                                <button class="btn btn-outline-secondary px-3 rounded-end-3" onclick="updateQuantity(<?php echo $item['id']; ?>, 'increment')">+</button>
+                                <div class="col-12">
+                                    <div class="cart-item d-flex align-items-start gap-4"
+                                        data-id="<?php echo $item['id']; ?>">
+                                        <img src="<?php echo $item['image_path']; ?>"
+                                            class="product-img flex-shrink-0 rounded-circle"
+                                            alt="<?php echo $item['title']; ?>">
+                                        <div class="flex-grow-1">
+                                            <h5 class="fw-semibold mb-2"><?php echo $item['title']; ?></h5>
+                                            <p class="text-muted mb-3"><?php echo $item['description']; ?></p>
+                                            <div class="d-flex align-items-center flex-wrap gap-3">
+                                                <div class="input-group quantity-selector">
+                                                    <button class="btn btn-outline-secondary px-3 rounded-start-3"
+                                                        onclick="updateQuantity(<?php echo $item['id']; ?>, 'decrement')">-</button>
+                                                    <input type="text" class="form-control text-center"
+                                                        value="<?php echo $item['quantity']; ?>" disabled>
+                                                    <button class="btn btn-outline-secondary px-3 rounded-end-3"
+                                                        onclick="updateQuantity(<?php echo $item['id']; ?>, 'increment')">+</button>
+                                                </div>
+                                                <h5 class="price ms-auto mb-0" data-price="<?php echo $item['price']; ?>">
+                                                    Rs. <?php echo number_format($item['price'] * $item['quantity'], 2); ?>
+                                                </h5>
+                                                <button class="btn btn-link text-danger p-0"
+                                                    onclick="deleteItem(<?php echo $item['id']; ?>)"><i
+                                                        class="bi bi-trash"></i></button>
                                             </div>
-                                            <h5 class="price ms-auto mb-0" data-price="<?php echo $item['price']; ?>">Rs. <?php echo number_format($item['price'] * $item['quantity'], 2); ?></h5>
-                                            <button class="btn btn-link text-danger p-0" onclick="deleteItem(<?php echo $item['id']; ?>)"><i class="bi bi-trash"></i></button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
@@ -310,153 +312,157 @@ $stmt->close();
                             <!-- <strong style="position:absolute; right:85px;">Rs</strong> -->
                             <strong id="total" name="total">0.00</strong>
                         </div>
-                        <button class="btn btn-primary w-100 py-3" name="submit" onclick="load()">Proceed to Checkout</button>
+                        <button class="btn btn-primary w-100 py-3" name="submit" onclick="load()">Proceed to
+                            Checkout</button>
                         <!-- onclick=" window.location.href = `cart.php?ischeckout=${'true'}`;" -->
                     </div>
                     <!-- </form> -->
                 </div>
             </div>
 
-            <a href="menu.php"><h5 class="mb-4">Back to Menu?</h5></a>
+            <a href="menu.php">
+                <h5 class="mb-4">Back to Menu?</h5>
+            </a>
         </div>
     </div>
 
-<script>
-    function load(){
-        let totalText = document.getElementById('total').innerText;
-    let totalAmount = totalText.replace('Rs. ', '').trim(); // Remove "Rs. " and trim spaces
- 
-    window.location.href = `cart.php?amtvalue=${totalAmount}`;
-    }
-</script>
-    
+    <script>
+        function load() {
+            let totalText = document.getElementById('total').innerText;
+            let totalAmount = totalText.replace('Rs. ', '').trim(); // Remove "Rs. " and trim spaces
 
-           <!-- Footer Start -->
-<div class="footer-5-column">
-    <div class="footer-container">
-      <!-- Footer Navigation Start -->
-      <div class="footer-navbar-container">
-        <div class="footer-company-details">
-          <!-- <div class="footer-details-inner"> -->
-          <div class="footer-logo">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="#000" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-            </svg>
-          </div>
-          <div class="footer-content">
-            <p>
-                Taste You Can Trust: From our kitchen to your plate, we promise uncompromised quality, genuine service, and memorable flavors.
-            </p>
-          </div>
-          <div class="footer-icons">
-            <ul>
-              <li>
-                <a href="#">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path
-                      d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z" />
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                    <path
-                      d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" />
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path
-                      d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                    <path
-                      d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
-                  </svg>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <!-- </div> -->
+            window.location.href = `cart.php?amtvalue=${totalAmount}`;
+        }
+    </script>
+
+
+    <!-- Footer Start -->
+    <div class="footer-5-column">
+        <div class="footer-container">
+            <!-- Footer Navigation Start -->
+            <div class="footer-navbar-container">
+                <div class="footer-company-details">
+                    <!-- <div class="footer-details-inner"> -->
+                    <div class="footer-logo">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" color="#000" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                        </svg>
+                    </div>
+                    <div class="footer-content">
+                        <p>
+                            Taste You Can Trust: From our kitchen to your plate, we promise uncompromised quality,
+                            genuine service, and memorable flavors.
+                        </p>
+                    </div>
+                    <div class="footer-icons">
+                        <ul>
+                            <li>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path
+                                            d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z" />
+                                    </svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path
+                                            d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z" />
+                                    </svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path
+                                            d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                                    </svg>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path
+                                            d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- </div> -->
+                </div>
+                <div class="footer-navbar">
+                    <div class="footer-navbar-col">
+                        <h5>Solutions</h5>
+                        <ul>
+                            <li><a href="#"> FoodCounter </a></li>
+                            <li><a href="#"> Feedback</a></li>
+                            <li><a href="#"> Insight </a></li>
+                            <li><a href="#"> Explore Menu </a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-navbar-col">
+                        <h5>Support</h5>
+                        <ul>
+                            <li><a href="index.php"> Home </a></li>
+                            <li><a href="about.php"> About </a></li>
+                            <li><a href="contact.php"> Contact </a></li>
+                            <li><a href="location.php"> Location </a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-navbar-col">
+                        <h5>Company</h5>
+                        <ul>
+                            <li><a href="#"> Terms and Conditions </a></li>
+                            <li><a href="#"> Polices </a></li>
+                            <li><a href="#"> Privacy </a></li>
+                            <li><a href="#"> Insight </a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-navbar-col">
+                        <h5>Legal</h5>
+                        <ul>
+                            <li><a href="#"> Commerce </a></li>
+                            <li><a href="#"> Analyst </a></li>
+                            <li><a href="#"> Insight </a></li>
+                            <li><a href="#"> Marketing </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer Navigation End -->
+            <div class="footer-copyright">
+                <p>© 2025 FoodVan - All Rights Reserved</p>
+            </div>
         </div>
-        <div class="footer-navbar">
-          <div class="footer-navbar-col">
-            <h5>Solutions</h5>
-            <ul>
-              <li><a href="#"> FoodCounter </a></li>
-              <li><a href="#"> Feedback</a></li>
-              <li><a href="#"> Insight </a></li>
-              <li><a href="#"> Explore Menu </a></li>
-            </ul>
-          </div>
-          <div class="footer-navbar-col">
-            <h5>Support</h5>
-            <ul>
-              <li><a href="index.php"> Home </a></li>
-              <li><a href="about.php"> About </a></li>
-              <li><a href="contact.php"> Contact </a></li>
-              <li><a href="location.php"> Location </a></li>
-            </ul>
-          </div>
-          <div class="footer-navbar-col">
-            <h5>Company</h5>
-            <ul>
-              <li><a href="#"> Terms and Conditions </a></li>
-              <li><a href="#"> Polices </a></li>
-              <li><a href="#"> Privacy </a></li>
-              <li><a href="#"> Insight </a></li>
-            </ul>
-          </div>
-          <div class="footer-navbar-col">
-            <h5>Legal</h5>
-            <ul>
-              <li><a href="#"> Commerce </a></li>
-              <li><a href="#"> Analyst </a></li>
-              <li><a href="#"> Insight </a></li>
-              <li><a href="#"> Marketing </a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <!-- Footer Navigation End -->
-      <div class="footer-copyright">
-        <p>© 2025 SpicyMonk - All Rights Reserved</p>
-      </div>
     </div>
-  </div>
-  <!-- Footer End-->
+    <!-- Footer End-->
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        
+
         // Calculate and update totals
-   // Calculate and update totals
-    function updateTotals() {
-        let subtotal = 0;
+        // Calculate and update totals
+        function updateTotals() {
+            let subtotal = 0;
 
-        document.querySelectorAll('.cart-item').forEach(item => {
-            const price = parseFloat(item.querySelector('.price').getAttribute('data-price')); // Get the original price
-            const quantity = parseInt(item.querySelector('input').value); // Get the quantity
-            subtotal += price * quantity; // Multiply price by quantity
-        });
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const price = parseFloat(item.querySelector('.price').getAttribute('data-price')); // Get the original price
+                const quantity = parseInt(item.querySelector('input').value); // Get the quantity
+                subtotal += price * quantity; // Multiply price by quantity
+            });
 
-        const tax = subtotal * 0.12;
-        const total = subtotal + tax;
+            const tax = subtotal * 0.12;
+            const total = subtotal + tax;
 
-        document.getElementById('subtotal').innerText = `Rs. ${subtotal.toFixed(2)}`;
-        document.getElementById('tax').innerText = `Rs. ${tax.toFixed(2)}`;
-        document.getElementById('total').innerText = `Rs. ${total.toFixed(2)}`;
-    }
+            document.getElementById('subtotal').innerText = `Rs. ${subtotal.toFixed(2)}`;
+            document.getElementById('tax').innerText = `Rs. ${tax.toFixed(2)}`;
+            document.getElementById('total').innerText = `Rs. ${total.toFixed(2)}`;
+        }
 
 
         // Update quantity
@@ -490,21 +496,21 @@ $stmt->close();
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `id=${id}`
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector(`.cart-item[data-id="${id}"]`).remove();
-                    updateTotals();
-                } else {
-                    // alert("Failed to delete item!");
-                    window.location.href='error.php';
-                }
-            })
-            .catch(err => {
-                // console.error(err);
-                // alert("Error deleting item!");
-                window.location.href='error.php';
-            });
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`.cart-item[data-id="${id}"]`).remove();
+                        updateTotals();
+                    } else {
+                        // alert("Failed to delete item!");
+                        window.location.href = 'error.php';
+                    }
+                })
+                .catch(err => {
+                    // console.error(err);
+                    // alert("Error deleting item!");
+                    window.location.href = 'error.php';
+                });
         }
 
         // Initial calculation
@@ -512,36 +518,37 @@ $stmt->close();
 
 
         // Update quantity
-function updateQuantity(id, action) {
-    fetch('update_cart.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `id=${id}&action=${action}`
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            const cartItem = document.querySelector(`.cart-item[data-id="${id}"]`);
-            cartItem.querySelector('input').value = data.quantity;
-            cartItem.querySelector('.price').innerText = `Rs. ${data.totalPrice}`;
-            document.getElementById('subtotal').innerText = `Rs. ${data.subtotal}`;
-            document.getElementById('tax').innerText = `Rs. ${data.tax}`;
-            document.getElementById('total').innerText = `Rs. ${data.total}`;
-         
-        } else {
-            // alert("Failed to update quantity!");
-             window.location.href='error.php';
+        function updateQuantity(id, action) {
+            fetch('update_cart.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${id}&action=${action}`
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const cartItem = document.querySelector(`.cart-item[data-id="${id}"]`);
+                        cartItem.querySelector('input').value = data.quantity;
+                        cartItem.querySelector('.price').innerText = `Rs. ${data.totalPrice}`;
+                        document.getElementById('subtotal').innerText = `Rs. ${data.subtotal}`;
+                        document.getElementById('tax').innerText = `Rs. ${data.tax}`;
+                        document.getElementById('total').innerText = `Rs. ${data.total}`;
+
+                    } else {
+                        // alert("Failed to update quantity!");
+                        window.location.href = 'error.php';
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    // alert("Error updating quantity!");
+                    window.location.href = 'error.php';
+                });
         }
-    })
-    .catch(err => {
-        console.error(err);
-        // alert("Error updating quantity!");
-        window.location.href='error.php';
-    });
-}
 
 
 
     </script>
 </body>
+
 </html>

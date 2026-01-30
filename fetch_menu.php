@@ -1,24 +1,18 @@
 <?php
-session_start(); 
+session_start();
 
-$host = "localhost"; 
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk";
-
-$conn = new mysqli($host, $username, $password, $database);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include database connection
+require_once 'db.php';
 
 $type = isset($_GET['type']) ? $_GET['type'] : 'all';
 $searchValue = isset($_SESSION['serch-value-fetch']) ? $_SESSION['serch-value-fetch'] : '';
 $categorySelected = isset($_SESSION['categoryselected']) ? $_SESSION['categoryselected'] : '';
-
-$sql = "SELECT image_path, rating, title, description, type, persons, price FROM products";
 $conditions = [];
 $params = [];
 $types = "";
+
+// Initialize the base SQL query
+$sql = "SELECT * FROM products";
 
 // Add type filter
 if ($type !== 'all') {
@@ -46,6 +40,7 @@ if (!empty($conditions)) {
     $sql .= " WHERE " . implode(" AND ", $conditions);
 }
 
+
 $stmt = $conn->prepare($sql);
 if (!empty($params)) {
     $stmt->bind_param($types, ...$params);
@@ -53,7 +48,7 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-if ($result->num_rows > 0) {  
+if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo '<div class="col-lg-4 col-sm-6 dish-box-wp">
                 <div class="dish-box text-center">

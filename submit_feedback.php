@@ -1,18 +1,9 @@
 
 <?php
 session_start();
-// Database connection
-$host = "localhost";
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk";
-
-include 'notification.php';
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include database connection
+require_once 'db.php';
+require_once 'notification.php';
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -22,14 +13,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = $_POST['Message']; // Case-sensitive
 
     if(preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email) == 0){
-        showNotification("Failed!", "Invalid email format");
         $_SESSION['feedback'] = false;
+        $_SESSION['feedback_message'] = "Invalid email format";
         header("Location: contact.php");
+        exit();
 
 }else{
     if(strlen($phone) != 10) {
-        showNotification("Failed!", "Phone number must be 10 digits");
         $_SESSION['feedback'] = false;
+        $_SESSION['feedback_message'] = "Phone number must be 10 digits";
         header("Location: contact.php");
         exit();
     }
@@ -39,13 +31,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssis", $name, $email, $phone, $message);
 
     if ($stmt->execute()) {
-        showNotification("Success!", "Feedback submitted");
         $_SESSION['feedback'] = true;
+        $_SESSION['feedback_message'] = "Feedback submitted successfully!";
        header("Location: contact.php");
+       exit();
     } else {
-        showNotification("Failed!", "Failed submission");
         $_SESSION['feedback'] = false;
+        $_SESSION['feedback_message'] = "Failed to submit feedback. Please try again.";
         header("Location: contact.php");
+        exit();
     }
 }
 

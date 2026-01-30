@@ -1,19 +1,13 @@
 <?php
 
 session_start();
-$_SESSION['categoryselected']="All Menus";
+$_SESSION['categoryselected'] = "All Menus";
 
-// Database connection
-$host = "localhost"; 
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk"; 
+// Include database connection
+require_once 'db.php';
 
-$conn = new mysqli($host, $username, $password, $database);
-
-// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
 
 $sql = "SELECT status FROM cart_status LIMIT 1";
@@ -23,31 +17,31 @@ $status = ($result->num_rows > 0) ? $result->fetch_assoc()['status'] : 'close';
 
 // Redirect to home if cart is open
 if ($status == 'close') {
-    header("Location: not_available.php");
-    exit;
+  header("Location: not_available.php");
+  exit;
 }
 
 // Fetch products from the database
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
 
-if(isset($_GET['search-result'])){
-    if($_GET['search-result']!==""){
+if (isset($_GET['search-result'])) {
+  if ($_GET['search-result'] !== "") {
 
-        $_SESSION['serch-value-fetch']=$_GET['search-result'];
-        $stmt = $conn->prepare("SELECT * FROM products WHERE title LIKE ?");
-        $searchValue = '%'.$_GET['search-result'] . '%'; 
-        $stmt->bind_param("s", $searchValue);
-        $stmt->execute();
-        
-    }else{
-        $_SESSION['serch-value-fetch']="";
-        $stmt = $conn->prepare("SELECT * FROM products");
-        $stmt->execute();
-    }
+    $_SESSION['serch-value-fetch'] = $_GET['search-result'];
+    $stmt = $conn->prepare("SELECT * FROM products WHERE title LIKE ?");
+    $searchValue = '%' . $_GET['search-result'] . '%';
+    $stmt->bind_param("s", $searchValue);
+    $stmt->execute();
 
-    $result = $stmt->get_result();
-    
+  } else {
+    $_SESSION['serch-value-fetch'] = "";
+    $stmt = $conn->prepare("SELECT * FROM products");
+    $stmt->execute();
+  }
+
+  $result = $stmt->get_result();
+
 }
 
 
@@ -57,443 +51,449 @@ if(isset($_GET['search-result'])){
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpicyMonk</title>
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
-    <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="Resources/SpicyMonk-Logo-V2.png" type="image/icon type">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-<style>
-.product-section {
-  padding: 20px;
-  position: relative;
-  /* background-color: #e3f4e8; */
-  border-radius: 10px;
-}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodVan</title>
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+  <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
+  <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="Resources/SpicyMonk-Logo-V2.png" type="image/icon type">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    .product-section {
+      padding: 20px;
+      position: relative;
+      /* background-color: #e3f4e8; */
+      border-radius: 10px;
+    }
 
-.product-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
+    .product-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
 
-.product-cards {
-  display: flex;
-  gap: 20px;
-  overflow-x: scroll;
-  scroll-behavior: smooth;
-  width: 80%;
-  padding: 10px 0;
-}
+    .product-cards {
+      display: flex;
+      gap: 20px;
+      overflow-x: scroll;
+      scroll-behavior: smooth;
+      width: 80%;
+      padding: 10px 0;
+    }
 
-.product-card {
-  flex: 0 0 calc(20% - 20px); /* Show 5 cards at a time */
-  max-width: 200px;
-  background: #e3f4e8;
-  /* border: 1px solid #b2d8c6; */
-  border-radius: 100px;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(30, 30, 30, 0.1);
-  transition: transform 0.3s;
-}
+    .product-card {
+      flex: 0 0 calc(20% - 20px);
+      /* Show 5 cards at a time */
+      max-width: 200px;
+      background: #e3f4e8;
+      /* border: 1px solid #b2d8c6; */
+      border-radius: 100px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(30, 30, 30, 0.1);
+      transition: transform 0.3s;
+    }
 
-.product-card:hover {
-  transform: translateY(-5px);
-}
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
 
-.product-card i {
-  font-size: 40px;
-  color: #09b344;
-  margin-bottom: 10px;
-}
+    .product-card i {
+      font-size: 40px;
+      color: #09b344;
+      margin-bottom: 10px;
+    }
 
-.product-card h3 {
-    display: block;
-  font-size: 16px;
-  font-weight: 600;
-  color: #09b344;
-  margin-bottom: 10px;
-}
+    .product-card h3 {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: #09b344;
+      margin-bottom: 10px;
+    }
 
-.product-card p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 15px;
-}
+    .product-card p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 15px;
+    }
 
-.add-to-cart {
-  background: #09b344;
-  color: #fff;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-}
+    .add-to-cart {
+      background: #09b344;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-.add-to-cart:hover {
-  background: #086f29;
-}
+    .add-to-cart:hover {
+      background: #086f29;
+    }
 
-.scroll-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #09b344;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 10; /* Ensures the buttons are above the cards */
-}
+    .scroll-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #09b344;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 10;
+      /* Ensures the buttons are above the cards */
+    }
 
-.scroll-btn.left-btn {
-  left: 10px;
-}
+    .scroll-btn.left-btn {
+      left: 10px;
+    }
 
-.scroll-btn.right-btn {
-  right: 10px;
-}
-
-
-.product-cards::-webkit-scrollbar {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .product-card {
-    flex: 0 0 calc(100%-20px); /* Show 2 cards on smaller screens */
-  }
-
-  .product-card i {
-    font-size: 30px;
-  }
-
-  .product-card h3 {
-    font-size: 16px;
-  }S
-
-  .product-card p {
-    font-size: 12px;
-  }
-
-  .add-to-cart {
-    font-size: 12px;
-  }
-}
-
-/* Centering the switch */
-.option-name-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 5px 0;
-}
-
-/* Compact Filter Switch */
-.option-name-switch {
-  border: 1.5px solid rgb(59, 186, 103);
-  border-radius: 20px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 36px;
-  width: 75%;
-  max-width: 280px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-/* Hide radio buttons */
-.option-name-switch input {
-  display: none;
-}
-
-/* Labels for options */
-.option-name-switch label {
-  flex: 1;
-  text-align: center;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  padding: 8px 0; /* Increased padding to prevent text overlap */
-  position: relative;
-  z-index: 2; /* Ensures text is above background */
-  transition: all 0.3s;
-}
-
-/* Background for selected option */
-.option-name-background {
-  position: absolute;
-  width: 32%;
-  height: 26px;
-  background-color:rgb(159, 217, 169);
-  top: 4px;
-  left: 4px;
-  border-radius: 20px;
-  transition: left 0.3s ease-in-out;
-  z-index: 1; /* Moves background behind text */
-}
-
-/* Move background when Veg is selected */
-#option-name-2:checked ~ .option-name-background {
-  left: 34%;
-}
-
-/* Move background when Non-Veg is selected */
-#option-name-3:checked ~ .option-name-background {
-  left: 68%;
-}
-
-/* Selected option styling */
-#option-name-1:checked + label,
-#option-name-2:checked + label,
-#option-name-3:checked + label {
-  color:rgb(35, 54, 42);
-  font-weight: bold;
-}
-
-/* Unselected option styling */
-.option-name-switch label {
-  color: #7d7d7d;
-}
+    .scroll-btn.right-btn {
+      right: 10px;
+    }
 
 
-</style>
+    .product-cards::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .product-card {
+        flex: 0 0 calc(100%-20px);
+        /* Show 2 cards on smaller screens */
+      }
+
+      .product-card i {
+        font-size: 30px;
+      }
+
+      .product-card h3 {
+        font-size: 16px;
+      }
+
+      S .product-card p {
+        font-size: 12px;
+      }
+
+      .add-to-cart {
+        font-size: 12px;
+      }
+    }
+
+    /* Centering the switch */
+    .option-name-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 5px 0;
+    }
+
+    /* Compact Filter Switch */
+    .option-name-switch {
+      border: 1.5px solid rgb(59, 186, 103);
+      border-radius: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 36px;
+      width: 75%;
+      max-width: 280px;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    /* Hide radio buttons */
+    .option-name-switch input {
+      display: none;
+    }
+
+    /* Labels for options */
+    .option-name-switch label {
+      flex: 1;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 8px 0;
+      /* Increased padding to prevent text overlap */
+      position: relative;
+      z-index: 2;
+      /* Ensures text is above background */
+      transition: all 0.3s;
+    }
+
+    /* Background for selected option */
+    .option-name-background {
+      position: absolute;
+      width: 32%;
+      height: 26px;
+      background-color: rgb(159, 217, 169);
+      top: 4px;
+      left: 4px;
+      border-radius: 20px;
+      transition: left 0.3s ease-in-out;
+      z-index: 1;
+      /* Moves background behind text */
+    }
+
+    /* Move background when Veg is selected */
+    #option-name-2:checked~.option-name-background {
+      left: 34%;
+    }
+
+    /* Move background when Non-Veg is selected */
+    #option-name-3:checked~.option-name-background {
+      left: 68%;
+    }
+
+    /* Selected option styling */
+    #option-name-1:checked+label,
+    #option-name-2:checked+label,
+    #option-name-3:checked+label {
+      color: rgb(35, 54, 42);
+      font-weight: bold;
+    }
+
+    /* Unselected option styling */
+    .option-name-switch label {
+      color: #7d7d7d;
+    }
+  </style>
 
 
 </head>
 
 <body class="body-fixed">
-<?php
-include 'header.php';
-?>
-
-   
+  <?php
+  include 'header.php';
+  ?>
 
 
-            <section style="background-image: url(assets/images/menu-bg.png);"
-                class="our-menu section bg-light repeat-img" id="menu">
-                <div class="sec-wp">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="sec-title text-center mb-5">
-                                    <p class="sec-sub-title mb-3">our menu</p>
-                                    <h2 class="h2-title">Early mornings, <span>fresh meals & healthy vibe</span></h2>
-                                    <div class="sec-title-shape mb-4">
-                                        <img src="assets/images/green-line.png" alt="" width="50%" height="50%">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-    
 
-                        <div class="option-name-container">
-    <div id="option-name-filter" class="option-name-switch">
-    <input checked id="option-name-1" name="menu-options" type="radio" onchange="fetchMenu('all')" />
-<label for="option-name-1">All</label>
+  <section style="background-image: url(assets/images/menu-bg.png);" class="our-menu section bg-light repeat-img"
+    id="menu">
+    <div class="sec-wp">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="sec-title text-center mb-5">
+              <p class="sec-sub-title mb-3">our menu</p>
+              <h2 class="h2-title">Early mornings, <span>fresh meals & healthy vibe</span></h2>
+              <div class="sec-title-shape mb-4">
+                <img src="assets/images/green-line.png" alt="" width="50%" height="50%">
+              </div>
+            </div>
+          </div>
+        </div>
 
-<input id="option-name-2" name="menu-options" type="radio" onchange="fetchMenu('veg')" />
-<label for="option-name-2">Veg</label>
 
-<input id="option-name-3" name="menu-options" type="radio" onchange="fetchMenu('non veg')" />
-<label for="option-name-3">Non Veg</label>
 
-        <span class="option-name-background"></span>
-    </div>
-</div>
+        <div class="option-name-container">
+          <div id="option-name-filter" class="option-name-switch">
+            <input checked id="option-name-1" name="menu-options" type="radio" onchange="fetchMenu('all')" />
+            <label for="option-name-1">All</label>
 
-               
-                        <section class="product-section">
-  <div class="product-container">
-    <button class="scroll-btn left-btn" onclick="scrolllefting()">&lt;</button>
-    <div class="product-cards" id="productScroll">
-      <?php
+            <input id="option-name-2" name="menu-options" type="radio" onchange="fetchMenu('veg')" />
+            <label for="option-name-2">Veg</label>
 
-      // Fetch categories from the database
-      $sql = "SELECT title FROM category";
-      $result = $conn->query($sql);
+            <input id="option-name-3" name="menu-options" type="radio" onchange="fetchMenu('non veg')" />
+            <label for="option-name-3">Non Veg</label>
 
-      // Check if any categories exist
-      if ($result->num_rows > 0) {
-          while ($row = $result->fetch_assoc()) {
-              echo '
+            <span class="option-name-background"></span>
+          </div>
+        </div>
+
+
+        <section class="product-section">
+          <div class="product-container">
+            <button class="scroll-btn left-btn" onclick="scrolllefting()">&lt;</button>
+            <div class="product-cards" id="productScroll">
+              <?php
+
+              // Fetch categories from the database
+              $sql = "SELECT title FROM category";
+              $result = $conn->query($sql);
+
+              // Check if any categories exist
+              if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                  echo '
               <div class="product-card" onclick="categoryload(this)">
                 <i class="fas fa-utensils"></i>
                 <h3>' . htmlspecialchars($row['title']) . '</h3>
               </div>
               ';
+                }
+              } else {
+                echo "<p>No categories available.</p>";
+              }
+
+              ?>
+            </div>
+            <button class="scroll-btn right-btn" onclick="scrollRight()">&gt;</button>
+          </div>
+        </section>
+
+
+        <script>
+          function categoryload(card) {
+            const cardValue = card.querySelector('h3').innerText; // Get the text inside the <h3>
+
+            // Redirect to the PHP file with the card value as a query parameter
+            window.location.href = `menu.php?cardValue=${encodeURIComponent(cardValue)}`;
           }
-      } else {
-          echo "<p>No categories available.</p>";
-      }
+        </script>
 
-      ?>
-    </div>
-    <button class="scroll-btn right-btn" onclick="scrollRight()">&gt;</button>
-  </div>
-</section>
+        <?php
 
+        if (isset($_GET['search-result'])) {
+          if ($_GET['search-result'] !== "") {
 
-<script>
-  function categoryload(card) {
-    const cardValue = card.querySelector('h3').innerText; // Get the text inside the <h3>
-
-    // Redirect to the PHP file with the card value as a query parameter
-    window.location.href = `menu.php?cardValue=${encodeURIComponent(cardValue)}`;
-  }
-</script>
-
-<?php
-    
-    if(isset($_GET['search-result'])){
-        if($_GET['search-result']!==""){
-    
             $stmt = $conn->prepare("SELECT * FROM products WHERE title LIKE ?");
-            $searchValue = '%'.$_GET['search-result'] . '%'; 
+            $searchValue = '%' . $_GET['search-result'] . '%';
             $stmt->bind_param("s", $searchValue);
             $stmt->execute();
-            
-        }else{
+
+          } else {
             $stmt = $conn->prepare("SELECT * FROM products");
             $stmt->execute();
-        }
-    
-        $result = $stmt->get_result();
-        
-    }else{
-
-        $stmt = $conn->prepare("SELECT * FROM products");
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-    }
-
-    if (isset($_GET['cardValue'])) {
-    
-        if(isset($_SESSION['serch-value-fetch'])){
-            unset( $_SESSION['serch-value-fetch']);
           }
 
-        $cardValue = $_GET['cardValue'];
+          $result = $stmt->get_result();
 
-        $_SESSION['categoryselected']=$cardValue;
+        } else {
 
-        if($cardValue=="All Menus"){
+          $stmt = $conn->prepare("SELECT * FROM products");
+          $stmt->execute();
+          $result = $stmt->get_result();
+
+        }
+
+        if (isset($_GET['cardValue'])) {
+
+          if (isset($_SESSION['serch-value-fetch'])) {
+            unset($_SESSION['serch-value-fetch']);
+          }
+
+          $cardValue = $_GET['cardValue'];
+
+          $_SESSION['categoryselected'] = $cardValue;
+
+          if ($cardValue == "All Menus") {
             $stmt = $conn->prepare("SELECT * FROM products");
             $stmt->execute();
-            
-        }else{
 
-        // Use prepared statements for safety
-        $stmt = $conn->prepare("SELECT * FROM products WHERE category = ?");
-        $stmt->bind_param("s", $cardValue);
-        $stmt->execute();
-     
+          } else {
+
+            // Use prepared statements for safety
+            $stmt = $conn->prepare("SELECT * FROM products WHERE category = ?");
+            $stmt->bind_param("s", $cardValue);
+            $stmt->execute();
+
+          }
+
+          // Fetch the results
+          $result = $stmt->get_result();
+
+          // Debugging: Log the query (optional, for testing purposes)
+        
+
         }
-    
-        // Fetch the results
-        $result = $stmt->get_result();
-    
-        // Debugging: Log the query (optional, for testing purposes)
-    
-    
-    }
-?>
+        ?>
 
 
 
 
-                        <div class="menu-tab-wp">
-                            <div class="row">
-                                <div class="col-lg-12 m-auto">
-                                </div>
-                            </div>
-                        </div>
+        <div class="menu-tab-wp">
+          <div class="row">
+            <div class="col-lg-12 m-auto">
+            </div>
+          </div>
+        </div>
 
 
-                        <div class="menu-list-row">
-                            <div class="row g-xxl-5 bydefault_show" id="menu-dish">
+        <div class="menu-list-row">
+          <div class="row g-xxl-5 bydefault_show" id="menu-dish">
 
-                            <?php
-                // Loop through each product and display it
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        ?>
-                        <div class="col-lg-4 col-sm-6 dish-box-wp <?php echo htmlspecialchars($row['category']); ?>" data-cat="<?php echo htmlspecialchars($row['category']); ?>">
-                            <div class="dish-box text-center">
-                                <div class="dist-img">
-                                    <img src="<?php echo htmlspecialchars($row['image_path']); ?>" alt="<?php echo htmlspecialchars($row['title']); ?>" height="85%" width="85%">
-                                </div>
-                                <div class="dish-rating">
-                                    <?php echo htmlspecialchars($row['rating']); ?>
-                                    <i class="uil uil-star"></i>
-                                </div>
-                                <div class="dish-title">
-                                    <h3 class="h3-title"><?php echo htmlspecialchars($row['title']); ?></h3>
-                                    <p><?php echo htmlspecialchars($row['description']); ?></p>
-                                </div>
-                                <div class="dish-info">
-                                    <ul>
-                                        <li>
-                                            <p>Type</p>
-                                            <b><?php echo htmlspecialchars($row['type']); ?></b>
-                                        </li>
-                                        <li>
-                                            <p>Persons</p>
-                                            <b><?php echo htmlspecialchars($row['persons']); ?></b>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="dist-bottom-row">
-                                    <ul>
-                                        <li>
-                                            <b>Rs. <?php echo htmlspecialchars($row['price']); ?></b>
-                                        </li>
-                                        <li>
-                                            <button class="dish-add-btn" onclick="addToCart(this)">
-                                                <i class="uil uil-plus"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-                    }
-                } else {
-                    echo "<p style='position:absolute; left:640px;'><i class='fa-solid fa-seedling'></i> No products available</p>";
-                }
-                $conn->close();
+            <?php
+            // Loop through each product and display it
+            if ($result->num_rows > 0) {
+              while ($row = $result->fetch_assoc()) {
                 ?>
-
-                            </div>
-                        </div>
+                <div class="col-lg-4 col-sm-6 dish-box-wp <?php echo htmlspecialchars($row['category']); ?>"
+                  data-cat="<?php echo htmlspecialchars($row['category']); ?>">
+                  <div class="dish-box text-center">
+                    <div class="dist-img">
+                      <img src="<?php echo htmlspecialchars($row['image_path']); ?>"
+                        alt="<?php echo htmlspecialchars($row['title']); ?>" height="85%" width="85%">
                     </div>
+                    <div class="dish-rating">
+                      <?php echo htmlspecialchars($row['rating']); ?>
+                      <i class="uil uil-star"></i>
+                    </div>
+                    <div class="dish-title">
+                      <h3 class="h3-title"><?php echo htmlspecialchars($row['title']); ?></h3>
+                      <p><?php echo htmlspecialchars($row['description']); ?></p>
+                    </div>
+                    <div class="dish-info">
+                      <ul>
+                        <li>
+                          <p>Type</p>
+                          <b><?php echo htmlspecialchars($row['type']); ?></b>
+                        </li>
+                        <li>
+                          <p>Persons</p>
+                          <b><?php echo htmlspecialchars($row['persons']); ?></b>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="dist-bottom-row">
+                      <ul>
+                        <li>
+                          <b>Rs. <?php echo htmlspecialchars($row['price']); ?></b>
+                        </li>
+                        <li>
+                          <button class="dish-add-btn" onclick="addToCart(this)">
+                            <i class="uil uil-plus"></i>
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-            </section>
+                <?php
+              }
+            } else {
+              echo "<p style='position:absolute; left:640px;'><i class='fa-solid fa-seedling'></i> No products available</p>";
+            }
+            $conn->close();
+            ?>
 
-            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
-           <!-- Footer Start -->
-<div class="footer-5-column">
+
+
+  <!-- Footer Start -->
+  <div class="footer-5-column">
     <div class="footer-container">
       <!-- Footer Navigation Start -->
       <div class="footer-navbar-container">
@@ -508,7 +508,8 @@ include 'header.php';
           </div>
           <div class="footer-content">
             <p>
-                Taste You Can Trust: From our kitchen to your plate, we promise uncompromised quality, genuine service, and memorable flavors.
+              Taste You Can Trust: From our kitchen to your plate, we promise uncompromised quality, genuine service,
+              and memorable flavors.
             </p>
           </div>
           <div class="footer-icons">
@@ -590,7 +591,7 @@ include 'header.php';
       </div>
       <!-- Footer Navigation End -->
       <div class="footer-copyright">
-        <p>© 2025 SpicyMonk - All Rights Reserved</p>
+        <p>© 2025 FoodVan - All Rights Reserved</p>
       </div>
     </div>
   </div>
@@ -598,90 +599,90 @@ include 'header.php';
 
 
 
-        </div>
-    </div>
+  </div>
+  </div>
 
-<script>
-const scrollContainer = document.getElementById('productScroll');
+  <script>
+    const scrollContainer = document.getElementById('productScroll');
 
 
-function scrollRight() {
-  scrollContainer.scrollBy({ left: 300, behavior: 'smooth' }); // Smooth scroll right
-}
+    function scrollRight() {
+      scrollContainer.scrollBy({ left: 300, behavior: 'smooth' }); // Smooth scroll right
+    }
 
-function scrolllefting() {
-  scrollContainer.scrollBy({ left: -300, behavior: 'smooth' }); // Smooth scroll right
-}
+    function scrolllefting() {
+      scrollContainer.scrollBy({ left: -300, behavior: 'smooth' }); // Smooth scroll right
+    }
 
-function addToCart(button) {
-    // Get the product title
-    const productTitle = button.closest(".dish-box").querySelector(".h3-title").textContent.trim();
+    function addToCart(button) {
+      // Get the product title
+      const productTitle = button.closest(".dish-box").querySelector(".h3-title").textContent.trim();
 
-    // Send product title to the PHP script
-    fetch("addToCart.php", {
+      // Send product title to the PHP script
+      fetch("addToCart.php", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            title: productTitle,
+          title: productTitle,
         }),
-    })
-    .then((response) => response.text())
-    .then((data) => {
-        //alert(data); // Show success or error message from PHP
-        window.location.href="cart.php";
-    })
-    .catch((error) => {
-        console.error("Error:", error);
-    });
-}
+      })
+        .then((response) => response.text())
+        .then((data) => {
+          //alert(data); // Show success or error message from PHP
+          window.location.href = "cart.php";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
 
 
-</script>
+  </script>
 
 
 
 
-    <!-- Scripts Spicy Monk -->
-    <script src="assets/js/jquery-3.5.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/popper.min.js"></script>
-    <script src="assets/js/font-awesome.min.js"></script>
-    <script src="assets/js/swiper-bundle.min.js"></script>
-    <script src="assets/js/jquery.mixitup.min.js"></script>
-    <script src="assets/js/jquery.fancybox.min.js"></script>
-    <script src="assets/js/parallax.min.js"></script>
-    <script src="assets/js/gsap.min.js"></script>
-    <script src="assets/js/ScrollTrigger.min.js"></script>
-    <script src="assets/js/ScrollToPlugin.min.js"></script>
-    <script src="assets/js/smooth-scroll.js"></script>
-    <script src="main.js"></script>
+  <!-- Scripts Spicy Monk -->
+  <script src="assets/js/jquery-3.5.1.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/font-awesome.min.js"></script>
+  <script src="assets/js/swiper-bundle.min.js"></script>
+  <script src="assets/js/jquery.mixitup.min.js"></script>
+  <script src="assets/js/jquery.fancybox.min.js"></script>
+  <script src="assets/js/parallax.min.js"></script>
+  <script src="assets/js/gsap.min.js"></script>
+  <script src="assets/js/ScrollTrigger.min.js"></script>
+  <script src="assets/js/ScrollToPlugin.min.js"></script>
+  <script src="assets/js/smooth-scroll.js"></script>
+  <script src="main.js"></script>
 
 
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
 
-    function fetchMenu(type) {
+      function fetchMenu(type) {
         let menuContainer = document.getElementById("menu-dish");
         if (!menuContainer) {
-            console.error("Error: #menu-dish not found in DOM.");
-            return;
+          console.error("Error: #menu-dish not found in DOM.");
+          return;
         }
 
         fetch("fetch_menu.php?type=" + type)
-            .then(response => response.text())
-            .then(data => {
-                menuContainer.innerHTML = data;
-            })
-            .catch(error => console.error("Error fetching menu:", error));
-    }
+          .then(response => response.text())
+          .then(data => {
+            menuContainer.innerHTML = data;
+          })
+          .catch(error => console.error("Error fetching menu:", error));
+      }
 
-    document.getElementById("option-name-1")?.addEventListener("change", () => fetchMenu("all"));
-    document.getElementById("option-name-2")?.addEventListener("change", () => fetchMenu("veg"));
-    document.getElementById("option-name-3")?.addEventListener("change", () => fetchMenu("nonveg"));
-});
-</script>
+      document.getElementById("option-name-1")?.addEventListener("change", () => fetchMenu("all"));
+      document.getElementById("option-name-2")?.addEventListener("change", () => fetchMenu("veg"));
+      document.getElementById("option-name-3")?.addEventListener("change", () => fetchMenu("nonveg"));
+    });
+  </script>
 
 
 </body>

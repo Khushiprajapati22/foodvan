@@ -8,11 +8,11 @@ if (!isset($_SESSION['useremail'])) {
     exit();
 }
 
+// Include database connection
+require_once 'db.php';
+
+// Get user email from session
 $useremail = $_SESSION['useremail'];
-$mysqli = new mysqli("localhost", "root", "abhi879687#", "spicymonk");
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-}
 
 // Search functionality
 $search_order_id = isset($_GET['search']) ? $_GET['search'] : '';
@@ -23,7 +23,7 @@ if ($search_order_id) {
 }
 $query .= " GROUP BY order_id ORDER BY order_date DESC";
 
-$stmt = $mysqli->prepare($query);
+$stmt = $conn->prepare($query);
 if ($search_order_id) {
     $stmt->bind_param("ss", $useremail, $search_order_id);
 } else {
@@ -39,28 +39,30 @@ if (isset($_GET['generate_receipt'])) {
     $sql = "SELECT o.quantity, o.title, p.price FROM orders o 
             JOIN products p ON o.title = p.title 
             WHERE o.order_id = ? AND o.email = ?";
-    $stmt = $mysqli->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $order_id, $useremail);
     $stmt->execute();
     $order_items = $stmt->get_result();
 
-    class PDF extends FPDF {
-        function Header() {
-            $this->Image('spicymonk-logo.png', 160, 10, 30);
+    class PDF extends FPDF
+    {
+        function Header()
+        {
             $this->SetFont('Arial', 'B', 16);
             $this->SetTextColor(0, 128, 0);
-            $this->Cell(0, 10, 'SpicyMonk', 0, 1, 'L');
+            $this->Cell(0, 10, 'FoodVan', 0, 1, 'L');
             $this->SetFont('Arial', '', 10);
             $this->Cell(0, 5, 'Pimple Nilakh, Pune, Maharashtra', 0, 1, 'L');
             $this->Ln(10);
         }
-        function Footer() {
+        function Footer()
+        {
             $this->SetY(-50);
             $this->SetFont('Arial', 'B', 12);
             $this->SetTextColor(0, 128, 0);
             $this->Cell(0, 10, 'TERMS & CONDITIONS', 0, 1, 'L');
             $this->SetFont('Arial', '', 10);
-            $this->MultiCell(0, 5, "Thank you for choosing SpicyMonk! We use fresh ingredients to deliver the best flavors.\nFor any issues or feedback, please contact us at support@spicymonk.com.\nAll sales are final. No refunds after food has been prepared.", 0, 'L');
+            $this->MultiCell(0, 5, "Thank you for choosing FoodVan! We use fresh ingredients to deliver the best flavors.\nFor any issues or feedback, please contact us at support@foodvan.com.\nAll sales are final. No refunds after food has been prepared.", 0, 'L');
         }
     }
 
@@ -116,6 +118,7 @@ if (isset($_GET['generate_receipt'])) {
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Order History</title>
     <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
@@ -126,27 +129,32 @@ if (isset($_GET['generate_receipt'])) {
             background-size: cover;
             background-position: center;
         }
-        .order-card { 
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1); 
-            transition: transform 0.2s; 
+
+        .order-card {
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
         }
-        .order-card:hover { 
-            transform: scale(1.02); 
+
+        .order-card:hover {
+            transform: scale(1.02);
         }
+
         .search-bar {
             display: flex;
             align-items: center;
         }
+
         .search-bar input {
             width: 250px;
             margin-right: 10px;
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-5">
         <nav class="navbar navbar-dark bg-dark mb-4">
-            <a class="navbar-brand mx-3">SpicyMonk</a>
+            <a class="navbar-brand mx-3">FoodVan</a>
             <form class="form-inline search-bar" method="GET">
                 <input class="form-control" type="search" name="search" placeholder="Search Order ID">
                 <button class="btn btn-success" type="submit">Search</button>
@@ -163,4 +171,5 @@ if (isset($_GET['generate_receipt'])) {
         <?php } ?>
     </div>
 </body>
+
 </html>

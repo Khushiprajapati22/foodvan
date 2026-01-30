@@ -6,16 +6,8 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     exit();
 }
 
-$host = "localhost";
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk";
-
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include database connection
+require_once 'db.php';
 
 // Fetch total counts
 $orderCountQuery = "SELECT COUNT(*) AS total_orders FROM orders";
@@ -147,22 +139,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['delete_id'])) {
 <?php include 'sidebar.php'; ?>
 <!-- SIDEBAR -->
 
-<!-- CONTENT -->
 <section id="content">
     <!-- NAVBAR -->
     <nav>
         <i class='bx bx-menu'></i>
         <?php
-$host = "localhost";  
-$username = "root";  
-$password = "abhi879687#";  
-$database = "spicymonk";  
-
-$conn = new mysqli($host, $username, $password, $database);  
-
-if ($conn->connect_error) {  
-    die("Connection failed: " . $conn->connect_error);  
-}
+// Include database connection
+require_once 'db.php';
 
 // Fetch current status
 $sql = "SELECT status FROM cart_status LIMIT 1";

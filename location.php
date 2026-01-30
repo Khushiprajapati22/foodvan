@@ -1,211 +1,209 @@
 <?php
 session_start();
-if(isset($_SESSION['serch-value-fetch'])){
-  unset( $_SESSION['serch-value-fetch']);
+if (isset($_SESSION['serch-value-fetch'])) {
+  unset($_SESSION['serch-value-fetch']);
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
-    <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="Resources/SpicyMonk-Logo-V2.png" type="image/icon type">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Pacifico&family=Great+Vibes&family=Lobster&family=Satisfy&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About us</title>
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+  <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
+  <link rel="icon" href="assets/icons/SpicyMonk-Logo-V2.png" type="image/icon type">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="Resources/SpicyMonk-Logo-V2.png" type="image/icon type">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Pacifico&family=Great+Vibes&family=Lobster&family=Satisfy&display=swap"
+    rel="stylesheet">
 
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <style>
-      /* Existing Styles */
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <style>
+    /* Existing Styles */
 
-      body{
-    background-image: url('assets/images/faq-bg.png');
-    background-size: cover;
-    background-position: center;
-}
+    body {
+      background-image: url('assets/images/faq-bg.png');
+      background-size: cover;
+      background-position: center;
+    }
 
-.location-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-    width: 100%;
-}
-
-.location-box {
-    background-image: url('assets/images/faq-bg.png');
-    background-size: cover;
-    background-position: center;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    width: 100%;
-    max-width: 1450px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-/* Left Side */
-.left-side {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-right: 20px;
-    text-align: left;
-}
-
-.location-title {
-    font-size: 40px;
-    font-weight: bold;
-    color: rgb(180, 255, 159);
-    font-family: 'Poppins', sans-serif;
-    margin-bottom: 15px;
-}
-
-.location-description {
-    font-size: 16px;
-    color: rgb(247, 247, 247);
-    line-height: 1.6;
-}
-
-/* Map Container */
-.map-container {
-    flex: 1;
-    height: 500px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius:30px;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
     .location-container {
-        flex-direction: column;
-        padding: 10px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      width: 100%;
     }
 
     .location-box {
-        flex-direction: column;
-        padding: 20px;
+      background-image: url('assets/images/faq-bg.png');
+      background-size: cover;
+      background-position: center;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      width: 100%;
+      max-width: 1450px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
 
+    /* Left Side */
     .left-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 20px;
+      text-align: left;
+    }
+
+    .location-title {
+      font-size: 40px;
+      font-weight: bold;
+      color: rgb(180, 255, 159);
+      font-family: 'Poppins', sans-serif;
+      margin-bottom: 15px;
+    }
+
+    .location-description {
+      font-size: 16px;
+      color: rgb(247, 247, 247);
+      line-height: 1.6;
+    }
+
+    /* Map Container */
+    .map-container {
+      flex: 1;
+      height: 500px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 30px;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .location-container {
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      .location-box {
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .left-side {
         text-align: center;
         padding-right: 0;
         margin-bottom: 20px;
-    }
+      }
 
-    .location-title {
+      .location-title {
         font-size: 24px;
-    }
+      }
 
-    .location-description {
+      .location-description {
         font-size: 14px;
         padding: 0 20px;
-    }
+      }
 
-    .map-container {
+      .map-container {
         height: 350px;
         margin-top: 20px;
+      }
     }
-}
 
-@media screen and (max-width: 480px) {
-    .location-title {
+    @media screen and (max-width: 480px) {
+      .location-title {
         font-size: 20px;
-    }
+      }
 
-    .location-description {
+      .location-description {
         font-size: 12px;
         padding: 0 10px;
-    }
+      }
 
-    .map-container {
+      .map-container {
         height: 300px;
+      }
     }
-}
-
-    </style>
+  </style>
 </head>
+
 <body>
-<?php
-include 'header.php';
-?>
+  <?php
+  include 'header.php';
+  ?>
 
-    <br><br>
+  <br><br>
 
-    <?php
-// Database connection settings
-$host = "localhost";  
-$username = "root";  
-$password = "abhi879687#";  
-$database = "spicymonk";  
+  <?php
+  // Include database connection
+  require_once 'db.php';
 
-$conn = new mysqli($host, $username, $password, $database);  
+  // Fetch the location name from the database
+  $query = "SELECT location_name FROM location WHERE id = 1";
+  $result = $conn->query($query);
 
-if ($conn->connect_error) {  
-    die("Connection failed: " . $conn->connect_error);  
-}
-
-// Fetch the location name from the database
-$query = "SELECT location_name FROM location WHERE id = 1";
-$result = $conn->query($query);
-
-if ($result->num_rows > 0) {
+  if ($result->num_rows > 0) {
     // Location found, fetch the location name
     $row = $result->fetch_assoc();
     $location = $row['location_name'];
 
     // Generate the URL for the iframe
-    $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed"; 
-} else {
+    $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed";
+  } else {
     // Default location if not found
     $location = "Pune, Maharashtra";
-    $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed"; 
-}
+    $map_url = "https://www.google.com/maps?q=" . urlencode($location) . "&output=embed";
+  }
 
-$conn->close();
-?>
+  $conn->close();
+  ?>
 
-    <div class="location-container">
+  <div class="location-container">
     <div class="location-box  bg-dark repeat-img">
-        <div class="left-side" style="align-items:center; justify-content:center;">
-            <h1 class="location-title" style="margin=bottom:5px; font-family: 'Great Vibes', cursive;">We Are Here</h1>
-            <p class="location-description">
-                Welcome! This is our current location, located in the heart of the city. We are proud to serve you with fresh and delicious meals at <span style="color:hsl(107, 100.00%, 90.40%);"><?php echo $location."."; ?></span> <br><br> Whether you're here for a quick bite or a relaxing meal with friends, our location offers a welcoming atmosphere for all. We hope to see you soon! Use the map below to find us easily and navigate through the city to reach our spot without hassle.
-            </p>
-        </div>
-        <div class="map-container">
-            <iframe src="<?php echo $map_url; ?>"></iframe>
-        </div>
+      <div class="left-side" style="align-items:center; justify-content:center;">
+        <h1 class="location-title" style="margin=bottom:5px; font-family: 'Great Vibes', cursive;">We Are Here</h1>
+        <p class="location-description">
+          Welcome! This is our current location, located in the heart of the city. We are proud to serve you with fresh
+          and delicious meals at <span style="color:hsl(107, 100.00%, 90.40%);"><?php echo $location . "."; ?></span>
+          <br><br> Whether you're here for a quick bite or a relaxing meal with friends, our location offers a welcoming
+          atmosphere for all. We hope to see you soon! Use the map below to find us easily and navigate through the city
+          to reach our spot without hassle.
+        </p>
+      </div>
+      <div class="map-container">
+        <iframe src="<?php echo $map_url; ?>"></iframe>
+      </div>
     </div>
-</div>
+  </div>
 
 
-     <!-- Footer Start -->
-<div class="footer-5-column">
+  <!-- Footer Start -->
+  <div class="footer-5-column">
     <div class="footer-container">
       <!-- Footer Navigation Start -->
       <div class="footer-navbar-container">
@@ -220,7 +218,8 @@ $conn->close();
           </div>
           <div class="footer-content">
             <p>
-                Taste You Can Trust: From our kitchen to your plate, we promise uncompromised quality, genuine service, and memorable flavors.
+              Taste You Can Trust: From our kitchen to your plate, we promise uncompromised quality, genuine service,
+              and memorable flavors.
             </p>
           </div>
           <div class="footer-icons">
@@ -302,26 +301,27 @@ $conn->close();
       </div>
       <!-- Footer Navigation End -->
       <div class="footer-copyright">
-        <p>© 2025 SpicyMonk - All Rights Reserved</p>
+        <p>© 2025 FoodVan - All Rights Reserved</p>
       </div>
     </div>
   </div>
   <!-- Footer End-->
 
-  
-    <!-- Scripts Spicy Monk -->
-    <script src="assets/js/jquery-3.5.1.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/popper.min.js"></script>
-    <script src="assets/js/font-awesome.min.js"></script>
-    <script src="assets/js/swiper-bundle.min.js"></script>
-    <script src="assets/js/jquery.mixitup.min.js"></script>
-    <script src="assets/js/jquery.fancybox.min.js"></script>
-    <script src="assets/js/parallax.min.js"></script>
-    <script src="assets/js/gsap.min.js"></script>
-    <script src="assets/js/ScrollTrigger.min.js"></script>
-    <script src="assets/js/ScrollToPlugin.min.js"></script>
-    <script src="assets/js/smooth-scroll.js"></script>
-    <script src="main.js"></script>
+
+  <!-- Scripts Spicy Monk -->
+  <script src="assets/js/jquery-3.5.1.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/font-awesome.min.js"></script>
+  <script src="assets/js/swiper-bundle.min.js"></script>
+  <script src="assets/js/jquery.mixitup.min.js"></script>
+  <script src="assets/js/jquery.fancybox.min.js"></script>
+  <script src="assets/js/parallax.min.js"></script>
+  <script src="assets/js/gsap.min.js"></script>
+  <script src="assets/js/ScrollTrigger.min.js"></script>
+  <script src="assets/js/ScrollToPlugin.min.js"></script>
+  <script src="assets/js/smooth-scroll.js"></script>
+  <script src="main.js"></script>
 </body>
+
 </html>

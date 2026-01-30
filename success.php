@@ -1,17 +1,8 @@
 <?php
 session_start();
 
-// Database connection
-$host = "localhost";
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk";
-
-$conn = new mysqli($host, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// Include database connection
+require_once 'db.php';
 
 if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'], $_GET['contact'], $_GET['order_date'])) {
     $order_id = $_GET['order_id'];
@@ -19,7 +10,7 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
     $username = $_GET['username'];
     $amount = $_GET['amount'] / 100;
     $contact = $_GET['contact'];
-    $order_date = $_GET['order_date']; 
+    $order_date = $_GET['order_date'];
 
     // Fetch cart items for the user
     $cartQuery = "SELECT title, quantity FROM cart WHERE email = ?";
@@ -33,7 +24,7 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
         $orderSql = "INSERT INTO orders (order_id, email, username, title, quantity, amount, contact, order_date) 
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $orderStmt = $conn->prepare($orderSql);
-        
+
         while ($row = $cartResult->fetch_assoc()) {
             $title = $row['title'];
             $quantity = $row['quantity'];
@@ -70,10 +61,11 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Success | SpicyMonk</title>
+    <title>Order Success | FoodVan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .success-container {
@@ -85,16 +77,19 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
             border-radius: 8px;
             text-align: center;
         }
+
         .success-icon {
             width: 60px;
             margin-bottom: 15px;
         }
+
         .btn-custom {
             width: 100%;
             margin-top: 10px;
         }
     </style>
 </head>
+
 <body class="bg-light d-flex align-items-center justify-content-center vh-100">
 
     <div class="success-container">
@@ -108,4 +103,5 @@ if (isset($_GET['order_id'], $_GET['email'], $_GET['username'], $_GET['amount'],
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

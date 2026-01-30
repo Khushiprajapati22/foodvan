@@ -8,24 +8,19 @@ if (!isset($_SESSION['admin']) || $_SESSION['admin'] !== true) {
     exit();
 }
 
-$host = "localhost";  
-$username = "root";  
-$password = "abhi879687#";  
-$database = "spicymonk";  
+// Include database connection
+require_once 'db.php';
 
-$conn = new mysqli($host, $username, $password, $database);  
-
-if ($conn->connect_error) {  
-    die("Connection failed: " . $conn->connect_error);  
-}
-
-class PDF extends FPDF {
-    function Header() {
+class PDF extends FPDF
+{
+    function Header()
+    {
         $this->SetFont('Arial', 'B', 14);
-        $this->Cell(190, 10, 'SpicyMonk Report', 0, 1, 'C');
+        $this->Cell(190, 10, 'FoodVan Report', 0, 1, 'C');
         $this->Ln(10);
     }
-    function Footer() {
+    function Footer()
+    {
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
         $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
@@ -37,43 +32,43 @@ if (isset($_POST['download_report'])) {
     $pdf = new PDF();
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 12);
-    
+
     $tables = [
         'sales' => ['orders', ['order_id', 'username', 'title', 'amount']],
         'suppliers' => ['suppliers', ['id', 'name', 'email', 'contact']],
-        'products' => ['products', ['id', 'title', 'rating', 'price','type','category']],
-        'customers' => ['user_details', ['firstname', 'lastname', 'email', 'contact','Uaddress']]
+        'products' => ['products', ['id', 'title', 'rating', 'price', 'type', 'category']],
+        'customers' => ['user_details', ['firstname', 'lastname', 'email', 'contact', 'Uaddress']]
     ];
     if (array_key_exists($reportType, $tables)) {
         list($table, $columns) = $tables[$reportType];
-    
+
         $pdf->Cell(190, 8, ucfirst($reportType) . ' Report', 0, 1, 'C');
         $pdf->Ln(5);
-    
+
         $pdf->SetFont('Arial', 'B', 8); // Reduced font size
-    
+
         // Calculate column width dynamically
         $colCount = count($columns);
         $colWidth = ($colCount > 4) ? 190 / $colCount : 40;
         $tableWidth = $colWidth * $colCount;
         $xPosition = (210 - $tableWidth) / 2; // Centering calculation
-    
+
         // Move to center
         $pdf->SetX($xPosition);
-    
+
         // Print headers
         foreach ($columns as $col) {
             $pdf->Cell($colWidth, 6, ucfirst($col), 1);
         }
         $pdf->Ln();
-    
+
         $pdf->SetFont('Arial', '', 7); // Smaller font for better fit
-    
+
         $result = $conn->query("SELECT " . implode(", ", $columns) . " FROM $table");
-    
+
         while ($row = $result->fetch_assoc()) {
             $pdf->SetX($xPosition); // Center each row
-    
+
             foreach ($columns as $col) {
                 if ($col == 'Uaddress') {
                     $pdf->MultiCell($colWidth, 6, $row[$col], 1);
@@ -84,10 +79,10 @@ if (isset($_POST['download_report'])) {
             $pdf->Ln();
         }
     }
-    
-    
-    
-    
+
+
+
+
     $pdf->Output();
     exit();
 }
@@ -95,6 +90,7 @@ if (isset($_POST['download_report'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -108,6 +104,7 @@ if (isset($_POST['download_report'])) {
             flex-wrap: wrap;
             gap: 20px;
         }
+
         .report-card {
             background: white;
             padding: 15px;
@@ -116,9 +113,11 @@ if (isset($_POST['download_report'])) {
             width: 250px;
             text-align: center;
         }
+
         .report-card h3 {
             margin-bottom: 10px;
         }
+
         .report-card button {
             background-color: lightblue;
             border: none;
@@ -126,53 +125,56 @@ if (isset($_POST['download_report'])) {
             border-radius: 10px;
             cursor: pointer;
         }
+
         .report-card button:hover {
             background-color: #4CAF50;
             color: white;
         }
     </style>
 </head>
+
 <body>
 
-<?php include 'sidebar.php'; ?>
+    <?php include 'sidebar.php'; ?>
 
-<section id="content">
-    <nav>
-        <i class='bx bx-menu'></i>
-    </nav>
+    <section id="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+        </nav>
 
-    <main>
-        <div class="head-title">
-            <div class="left">
-                <h1>Reports</h1>
-                <ul class="breadcrumb">
-                    <li><a href="dashboard.php">Dashboard</a></li>
-                    <li><i class='bx bx-chevron-right'></i></li>
-                    <li><a class="active" href="reports.php">Reports</a></li>
-                </ul>
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Reports</h1>
+                    <ul class="breadcrumb">
+                        <li><a href="dashboard.php">Dashboard</a></li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li><a class="active" href="reports.php">Reports</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-<br>
-        <div class="report-container">
-            <?php
-            $reportTypes = ['sales' => 'Sales Report', 'suppliers' => 'Suppliers Report', 'products' => 'Products Report', 'customers' => 'Customer Report'];
-            foreach ($reportTypes as $type => $label) {
-                echo "<div class='report-card'>
+            <br>
+            <div class="report-container">
+                <?php
+                $reportTypes = ['sales' => 'Sales Report', 'suppliers' => 'Suppliers Report', 'products' => 'Products Report', 'customers' => 'Customer Report'];
+                foreach ($reportTypes as $type => $label) {
+                    echo "<div class='report-card'>
                         <h3>$label</h3>
                         <form method='POST'>
                             <input type='hidden' name='report_type' value='$type'>
                             <button type='submit' name='download_report'>Download</button>
                         </form>
                       </div>";
-            }
-            ?>
-        </div>
-    </main>
-</section>
+                }
+                ?>
+            </div>
+        </main>
+    </section>
 
-<script src="dashscript.js"></script>
+    <script src="dashscript.js"></script>
 
 </body>
+
 </html>
 
 <?php

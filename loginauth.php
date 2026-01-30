@@ -1,27 +1,14 @@
-
 <?php
 session_start();
 
 
+// Include database connection
+require_once 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-// Database
-$host = "localhost"; 
-$username = "root";
-$password = "abhi879687#";
-$database = "spicymonk"; 
-
-$conn = new mysqli($host, $username, $password, $database);
-
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm-pass']);
-
     if($password !== $confirm || preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email)==false){
         $_SESSION['warningsignup'] = true;
         header('Location: signup.php');
