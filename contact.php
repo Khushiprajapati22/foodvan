@@ -458,7 +458,7 @@ if (isset($_SESSION['serch-value-fetch'])) {
                         </picture>
                         <div class="cs-flex-group">
                             <span class="cs-header">Address</span>
-                            <a href="https://maps.app.goo.gl/EZS4t51fUsDTCXXL6" class="cs-link">Ajmera Complex Pimpri , Pune ,
+                            <a href="https://maps.app.goo.gl/of9JmB6ch7MiaMfn6" class="cs-link">Ajmera Complex Pimpri , Pune ,
                                 Maharashtra</a>
                         </div>
                     </li>

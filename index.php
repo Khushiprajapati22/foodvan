@@ -651,7 +651,7 @@ if (isset($_SESSION['useremail'])) {
 
             </section>
 
-            <!-- <section class="our-team section">
+            <section class="our-team section">
                 <div class="sec-wp">
                     <div class="container">
                         <div class="row">
@@ -675,21 +675,14 @@ if (isset($_SESSION['useremail'])) {
                                             class="team-img back-img">
 
                                         </div>
-                                        <h3 class="h3-title">Hrishikesh Kahar</h3>
-                                        <div class="social-icon">
-                                            <ul>
-                                                <li>
-                                                    <a href="mailto:abhijittikone0@gmail.com"><i
-                                                            class="uil uil-at"></i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="https://www.instagram.com/hrishii_111/">
-                                                        <i class="uil uil-instagram"></i>
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        </div>
+                                        <h3 class="h3-title">Rahul Sharma</h3>
+<div class="social-icon">
+<ul>
+<li>
+<a href="mailto:rahul@gmail.com"><i class="uil uil-at"></i></a>
+</li>
+</ul>
+</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 swiper-slide">
@@ -698,38 +691,31 @@ if (isset($_SESSION['useremail'])) {
                                             class="team-img back-img">
 
                                         </div>
-                                        <h3 class="h3-title">Sujal Hinge</h3>
-                                        <div class="social-icon">
-                                            <ul>
-                                                <li>
-                                                    <a href="mailto:abhijittikone0@gmail.com"><i
-                                                            class="uil uil-at"></i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="https://www.instagram.com/sujal_hinge_patil/">
-                                                        <i class="uil uil-instagram"></i>
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        </div>
+                                        <h3 class="h3-title">Aman Verma</h3>
+<div class="social-icon">
+<ul>
+<li>
+<a href="mailto:aman@gmail.com"><i class="uil uil-at"></i></a>
+</li>
+</ul>
+</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 swiper-slide">
                                     <div class="team-box text-center">
-                                        <div style="background-image: url(assets/images/chef/chef-3.jpg); "
+                                        <div style="background-image: url(assets/images/chef/chef-03.jpg); "
                                             class="team-img back-img">
 
                                         </div>
-                                        <h3 class="h3-title">Shivprasad suryawanshi</h3>
+                                        <h3 class="h3-title">Khushi Prajapati</h3>
                                         <div class="social-icon">
                                             <ul>
                                                 <li>
-                                                    <a href="mailto:abhijittikone0@gmail.com"><i
+                                                    <a href="mailto:samyakkharat2003@outlook.com"><i
                                                             class="uil uil-at"></i></a>
                                                 </li>
                                                 <li>
-                                                    <a href="https://www.instagram.com/shivprasad.suryawanshi967/">
+                                                    <a href="https://www.instagram.com/khushiprajapati_22/">
                                                         <i class="uil uil-instagram"></i>
                                                     </a>
                                                 </li>
@@ -744,15 +730,15 @@ if (isset($_SESSION['useremail'])) {
                                             class="team-img back-img">
 
                                         </div>
-                                        <h3 class="h3-title">Abhijit Tikone</h3>
+                                        <h3 class="h3-title">Samyak Kharat</h3>
                                         <div class="social-icon">
                                             <ul>
                                                 <li>
-                                                    <a href="mailto:abhijittikone0@gmail.com"><i
+                                                    <a href="mailto:samyakkharat2003@outlook.com"><i
                                                             class="uil uil-at"></i></a>
                                                 </li>
                                                 <li>
-                                                    <a href="https://www.instagram.com/abhijit_99/">
+                                                    <a href="https://www.instagram.com/samya.22_/">
                                                         <i class="uil uil-instagram"></i>
                                                     </a>
                                                 </li>
@@ -767,21 +753,14 @@ if (isset($_SESSION['useremail'])) {
                                             class="team-img back-img">
 
                                         </div>
-                                        <h3 class="h3-title">Sanket Shinde</h3>
-                                        <div class="social-icon">
-                                            <ul>
-                                                <li>
-                                                    <a href="mailto:abhijittikone0@gmail.com"><i
-                                                            class="uil uil-at"></i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="https://www.instagram.com/sanketshinde764/">
-                                                        <i class="uil uil-instagram"></i>
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-                                        </div>
+                                        <h3 class="h3-title">Rohit Patil</h3>
+<div class="social-icon">
+<ul>
+<li>
+<a href="mailto:rohit@gmail.com"><i class="uil uil-at"></i></a>
+</li>
+</ul>
+</div>
                                     </div>
                                 </div>
                             </div>
